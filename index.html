@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Action ou Vérité 🔥</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --card: #18181c;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0eff4;
+    --muted: #6b6a72;
+
+    --family: #4ade80;
+    --family-glow: rgba(74,222,128,0.25);
+    --soft: #60a5fa;
+    --soft-glow: rgba(96,165,250,0.25);
+    --normal: #f59e0b;
+    --normal-glow: rgba(245,158,11,0.25);
+    --hardcore: #f43f5e;
+    --hardcore-glow: rgba(244,63,94,0.25);
+
+    --accent: #f43f5e;
+    --action-color: #f43f5e;
+    --verite-color: #60a5fa;
+
+    --mode-color: #f0eff4;
+    --mode-glow: rgba(240,239,244,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animated background blobs */
+  .bg-blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+    animation: blobFloat 8s ease-in-out infinite alternate;
+  }
+  .bg-blob:nth-child(1) { width: 400px; height: 400px; background: #f43f5e; top: -100px; left: -100px; animation-delay: 0s; }
+  .bg-blob:nth-child(2) { width: 350px; height: 350px; background: #60a5fa; bottom: -80px; right: -80px; animation-delay: 3s; }
+  .bg-blob:nth-child(3) { width: 250px; height: 250px; background: #f59e0b; bottom: 20%; left: 20%; animation-delay: 6s; }
+
+  @keyframes blobFloat {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(30px, -30px) scale(1.1); }
+  }
+
+  /* Screens */
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 480px;
+    padding: 20px;
+    animation: screenIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .screen.active { display: block; }
+
+  @keyframes screenIn {
+    from { opacity: 0; transform: scale(0.92) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* Card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 60%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+
+  /* Logo / Title */
+  .game-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    background: linear-gradient(135deg, #f43f5e, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .game-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  .emoji-big {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 16px;
+    animation: wiggle 2s ease-in-out infinite;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  /* Section title */
+  .section-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 14px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #f43f5e, #f97316);
+    color: white;
+    box-shadow: 0 8px 24px rgba(244,63,94,0.35);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 12px 32px rgba(244,63,94,0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+  /* Player input */
+  .input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .input-field {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-field:focus { border-color: rgba(244,63,94,0.5); }
+  .input-field::placeholder { color: var(--muted); }
+
+  .btn-add {
+    background: rgba(244,63,94,0.15);
+    border: 1px solid rgba(244,63,94,0.3);
+    border-radius: 12px;
+    color: #f43f5e;
+    font-size: 1.4rem;
+    width: 52px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .btn-add:hover { background: rgba(244,63,94,0.25); transform: scale(1.05); }
+
+  /* Player tags */
+  .players-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 40px;
+    margin-bottom: 20px;
+  }
+
+  .player-tag {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 7px 14px 7px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: tagIn 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes tagIn {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .tag-remove {
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .tag-remove:hover { color: #f43f5e; }
+
+  .player-color {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Mode cards */
+  .modes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .mode-card {
+    background: rgba(255,255,255,0.04);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mode-card:hover { transform: translateY(-3px); }
+
+  .mode-card.selected {
+    border-color: var(--mode-color);
+    background: var(--mode-glow);
+    box-shadow: 0 0 24px var(--mode-glow);
+  }
+
+  .mode-card.family { --mode-color: var(--family); --mode-glow: var(--family-glow); }
+  .mode-card.soft { --mode-color: var(--soft); --mode-glow: var(--soft-glow); }
+  .mode-card.normal { --mode-color: var(--normal); --mode-glow: var(--normal-glow); }
+  .mode-card.hardcore { --mode-color: var(--hardcore); --mode-glow: var(--hardcore-glow); }
+
+  .mode-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+  .mode-name { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+  .mode-desc { font-size: 0.7rem; color: var(--muted); margin-top: 4px; line-height: 1.3; font-weight: 600; }
+
+  .mode-card.selected .mode-name { color: var(--mode-color); }
+
+  /* Player spotlight */
+  .player-spotlight {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .spotlight-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .spotlight-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    animation: nameReveal 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes nameReveal {
+    from { opacity: 0; transform: scale(0.5) rotate(-5deg); }
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  .spinner {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 10px;
+    animation: spin 0.6s ease-out both;
+  }
+  @keyframes spin { from { transform: rotate(-360deg) scale(0.5); opacity: 0; } to { transform: rotate(0) scale(1); opacity: 1; } }
+
+  /* Choice buttons */
+  .choice-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .choice-btn {
+    border: none;
+    border-radius: 18px;
+    padding: 22px 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .choice-btn:hover { transform: translateY(-4px) scale(1.02); }
+  .choice-btn:active { transform: scale(0.97); }
+
+  .choice-btn.action {
+    background: linear-gradient(135deg, #f43f5e, #f97316);
+    color: white;
+    box-shadow: 0 10px 30px rgba(244,63,94,0.4);
+  }
+
+  .choice-btn.verite {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    color: white;
+    box-shadow: 0 10px 30px rgba(59,130,246,0.4);
+  }
+
+  .choice-btn .choice-icon { display: block; font-size: 1.5rem; margin-bottom: 4px; }
+  .choice-btn .choice-label { display: block; font-size: 0.75rem; font-family: 'Nunito', sans-serif; font-weight: 700; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  /* Challenge display */
+  .challenge-type {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 50px;
+  }
+
+  .challenge-type.action-type { background: rgba(244,63,94,0.15); color: #f43f5e; }
+  .challenge-type.verite-type { background: rgba(59,130,246,0.15); color: #60a5fa; }
+
+  .challenge-text {
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1.5;
+    margin: 16px 0 28px;
+    min-height: 80px;
+    animation: challengeIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes challengeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .challenge-player {
+    color: var(--accent);
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+
+  /* Round counter */
+  .round-badge {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 5px 13px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* Utility */
+  .mt-4 { margin-top: 16px; }
+  .mt-6 { margin-top: 24px; }
+  .mb-4 { margin-bottom: 16px; }
+  .text-muted { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+
+  .player-avatar {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 12px;
+    border: 3px solid;
+  }
+
+  /* Confetti particle */
+  .confetti {
+    position: fixed;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    pointer-events: none;
+    animation: confettiFall 1s ease-in forwards;
+    z-index: 999;
+  }
+
+  @keyframes confettiFall {
+    from { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Skip btn */
+  .btn-skip {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 10px;
+  }
+  .btn-skip:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+  /* Mode indicator bar */
+  .mode-bar {
+    height: 3px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    background: linear-gradient(90deg, var(--mode-color, #f43f5e), transparent);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-blob"></div>
+<div class="bg-blob"></div>
+<div class="bg-blob"></div>
+
+<!-- SCREEN 1 : Accueil -->
+<div class="screen active" id="screen-home">
+  <div class="card">
+    <span class="emoji-big">🔥</span>
+    <div class="game-logo">Action<br>ou Vérité</div>
+    <div class="game-sub">Le jeu qui met à l'épreuve</div>
+    <div class="divider"></div>
+    <p class="text-muted mb-4">Le jeu culte, en version digitale. Bonne ambiance garantie — ou pas.</p>
+    <button class="btn btn-primary mt-4" onclick="goTo('screen-players')">Commencer 🚀</button>
+  </div>
+</div>
+
+<!-- SCREEN 2 : Joueurs -->
+<div class="screen" id="screen-players">
+  <div class="card">
+    <div class="section-title">Étape 1 / 3 · Les joueurs</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.05em;margin-bottom:20px;">Qui joue ?</div>
+
+    <div class="input-row">
+      <input class="input-field" id="player-input" type="text" placeholder="Prénom du joueur..." maxlength="20" onkeydown="if(event.key==='Enter')addPlayer()">
+      <button class="btn-add" onclick="addPlayer()">+</button>
+    </div>
+
+    <div class="players-list" id="players-list">
+      <p class="text-muted" id="players-placeholder" style="padding:4px 0">Ajoute au moins 2 joueurs</p>
+    </div>
+
+    <button class="btn btn-primary" onclick="goToMode()" id="btn-next-players" disabled style="opacity:0.4">Continuer →</button>
+    <button class="btn btn-ghost mt-4" onclick="goTo('screen-home')" style="margin-top:12px">← Retour</button>
+  </div>
+</div>
+
+<!-- SCREEN 3 : Mode -->
+<div class="screen" id="screen-mode">
+  <div class="card">
+    <div class="section-title">Étape 2 / 3 · Ambiance</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.05em;margin-bottom:20px;">Quel mode ?</div>
+
+    <div class="modes-grid">
+      <div class="mode-card family" onclick="selectMode('family', this)">
+        <span class="mode-emoji">👨‍👩‍👧‍👦</span>
+        <div class="mode-name">Famille</div>
+        <div class="mode-desc">Safe & fun pour tous les âges</div>
+      </div>
+      <div class="mode-card soft" onclick="selectMode('soft', this)">
+        <span class="mode-emoji">😊</span>
+        <div class="mode-name">Soft</div>
+        <div class="mode-desc">Tranquille, mais pas nul</div>
+      </div>
+      <div class="mode-card normal" onclick="selectMode('normal', this)">
+        <span class="mode-emoji">😏</span>
+        <div class="mode-name">Normal</div>
+        <div class="mode-desc">Ça commence à chauffer</div>
+      </div>
+      <div class="mode-card hardcore" onclick="selectMode('hardcore', this)">
+        <span class="mode-emoji">🔥</span>
+        <div class="mode-name">Hardcore</div>
+        <div class="mode-desc">Âmes sensibles s'abstenir</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="startGame()" id="btn-start" disabled style="opacity:0.4">C'est parti 🎲</button>
+    <button class="btn btn-ghost" onclick="goTo('screen-players')" style="margin-top:12px">← Retour</button>
+  </div>
+</div>
+
+<!-- SCREEN 4 : Joueur sélectionné -->
+<div class="screen" id="screen-player-turn">
+  <div class="card">
+    <div class="round-badge" id="round-counter">Tour 1</div>
+    <div class="mode-bar" id="mode-bar-1"></div>
+
+    <div class="player-spotlight">
+      <div class="spotlight-label">C'est au tour de...</div>
+      <div class="player-avatar" id="player-avatar" style="border-color:#f43f5e;background:rgba(244,63,94,0.1)">😎</div>
+      <div class="spotlight-name" id="current-player-name">Alex</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" style="text-align:center;margin-bottom:6px">Fais ton choix</div>
+
+    <div class="choice-btns">
+      <button class="choice-btn action" onclick="showChallenge('action')">
+        <span class="choice-icon">💪</span>
+        Action
+        <span class="choice-label">Ose le faire</span>
+      </button>
+      <button class="choice-btn verite" onclick="showChallenge('verite')">
+        <span class="choice-icon">💬</span>
+        Vérité
+        <span class="choice-label">Dis la vérité</span>
+      </button>
+    </div>
+
+    <button class="btn btn-ghost" onclick="goTo('screen-mode')" style="margin-top:16px;font-size:0.8rem;padding:10px">⚙️ Changer de mode</button>
+  </div>
+</div>
+
+<!-- SCREEN 5 : Défi / Question -->
+<div class="screen" id="screen-challenge">
+  <div class="card">
+    <div class="round-badge" id="round-counter-2">Tour 1</div>
+    <div class="mode-bar" id="mode-bar-2"></div>
+
+    <span class="challenge-player" id="challenge-player-name">ALEX</span>
+    <div class="challenge-type" id="challenge-type-badge">Action</div>
+
+    <div class="challenge-text" id="challenge-text">
+      Fais 10 pompes sans t'arrêter.
+    </div>
+
+    <button class="btn btn-primary" onclick="nextTurn()">Tour suivant 🎲</button>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn-skip" onclick="skipChallenge()" style="flex:1">↩ Passer (même joueur)</button>
+      <button class="btn-skip" onclick="goTo('screen-home')" style="flex:1">🏠 Menu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ——— DATA ———
+  const COLORS = ['#f43f5e','#60a5fa','#4ade80','#f59e0b','#a78bfa','#fb923c','#34d399','#f472b6'];
+  const AVATARS = ['😎','🤩','😈','🥳','😏','🤠','😤','🥸','😇','🤡'];
+
+  const CHALLENGES = {
+    family: {
+      action: [
+        "Fais la chenille tout seul autour du groupe.",
+        "Parle comme Yoda jusqu'à ton prochain tour ('La vérité, tu choisiras...').",
+        "Fais une battle de regards avec la personne en face. Le premier qui rit a perdu.",
+        "Envoie un message à ta mère/père disant juste 'Merci pour tout ❤️' sans contexte. Montre la réponse !",
+        "Essaie de mettre tes chaussettes avec les dents.",
+        "Invente une chorégraphie sur la sonnerie de téléphone de quelqu'un.",
+        "Fais 5 burpees. Ou essaie. L'effort compte !",
+        "Imite le démarrage d'un vieux modem 56k.",
+        "Fais le moonwalk sur 3 mètres. Ou du moins, une tentative honorable.",
+        "Laisse quelqu'un te coiffer de manière ridicule. Photo obligatoire.",
+        "Parle en verlan jusqu'à ton prochain tour.",
+        "Mange une chips ou un biscuit sans utiliser tes mains.",
+        "Fais le bruitage d'un personnage de jeu vidéo connu (Mario, Sonic...).",
+        "Fais une imitation d'un personnage de télé-réalité emblématique.",
+        "Imite le cri de l'animal qui te représente le moins bien.",
+        "Chante le générique d'un dessin animé de ton enfance à fond.",
+        "Fais semblant d'être un robot qui découvre les émotions humaines.",
+        "Récite l'alphabet à l'envers le plus vite possible.",
+        "Fais le tour de la pièce en sautillant à cloche-pied en chantant.",
+        "Fais semblant d'être un T-Rex qui essaie de boire dans un verre.",
+        "Propose un 'check' ultra compliqué à la personne à ta gauche.",
+        "Fais 3 tours sur toi-même puis marche en ligne droite les yeux ouverts.",
+        "Imite la voix d'un autre joueur et parle comme lui pendant 1 minute.",
+        "Dessine un autoportrait les yeux fermés en 30 secondes.",
+        "Fais le poirier contre un mur pendant 10 secondes.",
+        "Dis 5 compliments à 5 personnes différentes en 30 secondes.",
+        "Appelle un proche et dis-lui une blague nulle.",
+        "Fais une danse de victoire pendant 20 secondes.",
+        "Porte un casque imaginaire et commente la partie comme un match de foot.",
+        "Invente une nouvelle règle complètement absurde pour ce jeu.",
+        "Raconte une blague que seul toi trouves drôle. On jugera.",
+        "Décris ton plat préféré comme si c'était une œuvre d'art.",
+        "Fais semblant d'être un présentateur météo pendant 1 minute.",
+        "Dis l'alphabet à l'envers aussi vite que possible.",
+        "Imite le bruit d'un aspirateur pendant 20 secondes.",
+        "Fais 10 pompes sans t'arrêter.",
+        "Chante ta réponse à la prochaine question qu'on te pose.",
+        "Fais le tour de la pièce en marchant comme un manchot.",
+        "Imite un animal de la ferme pendant 30 secondes sans t'arrêter.",
+        "Essaie de lécher ton coude. Montre tes tentatives.",
+        "Fais 3 fois le tour de la table à cloche-pied.",
+        "Tourne 10 fois sur toi-même puis cours en ligne droite.",
+        "Fais un bras de fer avec le joueur de ton choix.",
+        "Finis toutes tes phrases par 'ça ne fait aucun doute' jusqu'à ton prochain tour.",
+        "Fais la démarche d'un zombie pendant 1 minute entière.",
+        "Imite parfaitement un chanteur ou chanteur connu pendant 30 secondes.",
+        "Essaie de faire tenir un objet en équilibre sur ta tête pendant 20 secondes.",
+        "Appelle quelqu'un et demande-lui, très sérieusement, s'il croit aux extraterrestres.",
+        "Fais deviner une émotion uniquement par ton visage, sans son.",
+        "Invente et chante un jingle publicitaire pour le joueur à ta droite.",
+        "Fais semblant de plonger dans une piscine imaginaire au ralenti.",
+        "Fais 5 expressions de visage différentes en 10 secondes.",
+        "Tente de réaliser un tour de magie avec les objets dans la pièce.",
+        "Parle de toi à la troisième personne jusqu'à ton prochain tour.",
+        "Montre ta plus vieille photo dans ton téléphone.",
+        "Fais un câlin à quelqu'un pendant 10 secondes sans rire.",
+        "Chante 'Joyeux anniversaire' à quelqu'un dans la pièce.",
+        "Décris comment tu imagines la vie dans 100 ans en 1 minute.",
+        "Fais une pause photo avec tout le groupe dans la position la plus ridicule.",
+        "Fais semblant d'être un commentateur sportif pendant que quelqu'un marche.",
+        "Mange quelque chose les yeux bandés et devine ce que c'est.",
+        "Fais la même grimace que l'emoji 😬 pendant 30 secondes sans rire.",
+        "Imite un poisson dans un bocal pendant 20 secondes.",
+        "Envoie un GIF bizarre au 1er contact de ta liste. Montre sa réaction.",
+        "Fais semblant d'être somnambule pendant 30 secondes.",
+        "Lis un passage de livre ou de magazine avec un accent étranger.",
+        "Fais le moonwalk tout en tenant une conversation normale.",
+        "Mime 'patiner sur une glace' pendant 30 secondes.",
+        "Montre la photo la plus bizarre que tu aies sur ton téléphone.",
+        "Fais semblant d'interviewer un objet inanimé de la pièce.",
+        "Essaie de toucher ton nez avec ta langue.",
+        "Fais le bruitage complet d'une scène d'action de film.",
+        "Chante la prochaine phrase que tu diras au lieu de la dire normalement.",
+        "Fais semblant d'être un vendeur qui essaie de vendre une chaise comme si c'était un trésor.",
+        "Imite la façon dont chaque joueur marche. Ils doivent se reconnaître.",
+        "Fais 10 sauts sur place en chantant une chanson.",
+        "Montre comment tu danses quand tu es seul chez toi.",
+        "Invente un surnom pour chaque joueur en 30 secondes.",
+        "Fais semblant d'être un chiot qui demande à manger.",
+        "Lis le contenu de ta dernière note vocale à voix haute avec émotion.",
+        "Imite comment tu réagis quand tu reçois un bon cadeau.",
+        "Fais la démo de comment tu chantes sous la douche.",
+        "Mime un sport sans le nommer. Les autres doivent deviner.",
+        "Dis 'je t'aime' en 5 langues différentes.",
+        "Fais semblant d'être un acteur qui joue une scène de rupture dramatique.",
+        "Ferme les yeux et pointe vers qui tu penses être le plus drôle du groupe.",
+        "Fais un discours de 30 secondes pour convaincre tout le monde que l'ananas sur la pizza est excellent.",
+        "Montre ta notification la plus bizarre reçue cette semaine.",
+        "Fais le son que tu ferais si tu mordais dans un citron.",
+        "Imite comment tu regardes ton téléphone quand tu reçois un message de quelqu'un qui te plaît.",
+        "Fais semblant d'être en train de nager en plein milieu de la pièce pendant 20 secondes.",
+        "Dis le nom de 5 fruits en 5 langues différentes.",
+        "Imite comment tu te comportes le lundi matin avant le café.",
+        "Fais semblant que le sol est de la lave pendant 15 secondes.",
+        "Montre comment tu te comportes quand tu essaies d'impressionner quelqu'un.",
+        "Fais un selfie avec la tête la plus bizarre possible et montre tout le monde.",
+        "Dis une phrase avec tous les mots qui commencent par la même lettre.",
+        "Fais semblant d'être un fantôme qui hante la pièce pendant 20 secondes.",
+        "Imite le personnage de dessin animé que tu regardais enfant.",
+        "Fais la roue ou tente de la faire. L'effort est apprécié.",
+      ],
+      verite: [
+        "Quelle est la chose la plus bête que tu aies achetée sur un coup de tête ?",
+        "Si tes chaussettes pouvaient parler, que diraient-elles de toi ?",
+        "Quelle est la fake news la plus improbable à laquelle tu as presque cru ?",
+        "Ton talent caché le plus inutile ? Décris-le.",
+        "Quelle est la tendance mode que tu ne comprendras jamais ?",
+        "Quel super-pouvoir voudrais-tu juste pour ta vie quotidienne ?",
+        "Si tu devais créer un parfum, quel nom et quelle odeur aurait-il ?",
+        "Ton appli téléphone la plus inutile mais que tu gardes quand même ?",
+        "Quel est le pire cadeau que tu aies jamais reçu ? (Et t'as fait semblant d'aimer ?)",
+        "Si tu pouvais renommer une couleur, laquelle et comment ?",
+        "Raconte ta dernière recherche Google un peu honteuse.",
+        "Quelle est la chose la plus stupide que tu aies faite en public ?",
+        "À quel animal ressemble la personne à ta droite ?",
+        "Quel est le pire souvenir de ton enfance ?",
+        "Dans quel endroit embarrassant as-tu déjà fait pipi ?",
+        "Jusqu'à quand as-tu dormi avec ton doudou ?",
+        "Quelle association étrange de nourriture as-tu déjà faite ?",
+        "Qu'est-ce qui est anormal chez toi ?",
+        "Quelle émission de télévision es-tu gêné de regarder ?",
+        "Quel tic irritant as-tu que tu sais pertinemment avoir ?",
+        "Si tu devais mettre ton téléphone dans les mains de quelqu'un une minute, qui serait-il ?",
+        "Quelle est la phrase que tu répètes le plus souvent sans t'en rendre compte ?",
+        "Quelle est la chose la plus stupide que tu aies dite en croyant avoir l'air intelligent ?",
+        "Quel est le pire tour que tu aies joué à quelqu'un ?",
+        "Quel est ton rêve récurrent le plus bizarre ?",
+        "Quelle est la question que tu ne veux surtout pas qu'on te pose ?",
+        "Quel a été le moment le plus gênant de ta vie ?",
+        "Quelle est la pire chose que tu détestes chez le sexe opposé ?",
+        "Quel est le pire défi que tu aies accepté ?",
+        "Quelle est la rumeur la plus improbable qui a été dite sur toi ?",
+        "Dors-tu encore avec une veilleuse ou un doudou ?",
+        "Quelle est ta tenue pour dormir ?",
+        "Es-tu déjà tombé sans raison devant plein de monde ? Raconte.",
+        "Quelle est la chose la plus bête que tu aies crue quand tu étais enfant ?",
+        "As-tu déjà eu un fou rire dans un endroit complètement inapproprié ?",
+        "Quel est ton talent caché dont tu n'es pas très fier ?",
+        "Quelle est ta peur la plus irrationnelle ?",
+        "Si tu devais fuir une catastrophe naturelle, quelle serait la première chose que tu prendrais ?",
+        "Quel est le dernier mensonge que tu as dit à ta famille ?",
+        "As-tu déjà prétendu ne pas avoir vu un message ?",
+        "Quel personnage de série télé te ressemble le plus (honnêtement) ?",
+        "Quelle est la chose que tu fais encore secrètement que tes amis penseraient puérile ?",
+        "Quel est le film que tu aimes mais que tu n'oserais jamais avouer ?",
+        "Quelle est la chose la plus impulsive que tu aies faite ?",
+        "As-tu déjà fait semblant d'avoir ton téléphone qui sonne pour éviter une conversation ?",
+        "Quelle est la blague que toi seul trouves hilarante ?",
+        "Quelle est la chose la plus cliché que tu aies faite romantiquement ?",
+        "Si tu pouvais avoir la voix d'une célébrité, qui choisirais-tu ?",
+        "Quelle est ton habitude secrète la plus bizarre à la maison ?",
+        "Quel est le surnom embarrassant qu'on t'a donné ?",
+        "Quelle est la chose que tu fais quand tu es seul et que tu n'admettras jamais ?",
+        "Quel objet possèdes-tu depuis l'enfance et que tu n'arrives pas à jeter ?",
+        "Quelle est la chose la plus ridicule pour laquelle tu as pleuré ?",
+        "As-tu déjà triché dans un jeu de société ? Lequel et comment ?",
+        "Quelle est la chose la plus gênante que tu aies dite à quelqu'un par erreur ?",
+        "Quelle est la première chose que tu fais le matin sur ton téléphone ?",
+        "Quelle est ta honte culinaire la plus profonde ?",
+        "Quelle chanson connais-tu par cœur et tu chantes à fond mais honte ?",
+        "As-tu déjà prétendu aimer quelque chose juste pour faire bonne impression ?",
+        "Quel est le truc le plus nul que t'as fait par peer pressure ?",
+        "Quelle est la chose que tu t'es promis de faire et que tu repousses depuis des mois ?",
+        "Quelle est la personnalité que tu adoptes quand tu rencontres quelqu'un de nouveau ?",
+        "Quel est le compliment le plus bizarre qu'on t'ait jamais fait ?",
+        "Quelle est ta superstition secrète ?",
+        "Si tu n'étais pas là ce soir, que ferais-tu ?",
+        "Quelle est la chose la plus improbable dont tu aies été accusé à tort ?",
+        "Quelle est la chose la plus créative que tu aies inventée pour éviter de faire quelque chose ?",
+        "Quel est le cadeau que tu as offert et que tu aurais voulu garder ?",
+        "Quel est ton souvenir culinaire le plus embarrassant ?",
+        "Quelle est la décision la plus impulsive que tu aies prise dont tu es finalement content ?",
+        "Quelle est la série ou émission que tu regardes en boucle sans jamais t'en lasser ?",
+        "As-tu déjà fait semblant de ne pas parler une langue pour éviter une conversation ?",
+        "Quel est le pire mensonge que tu aies dit à tes parents et qu'ils ont cru ?",
+        "Quelle est la chose la plus bizarre que tu aies mangée par curiosité ?",
+        "Quel est ton défaut dont tu es le plus conscient mais que tu n'arrives pas à corriger ?",
+        "Quelle est la chose la plus longtemps que tu aies procrastinée ?",
+        "Quelle est la vidéo YouTube que tu as vue le plus grand nombre de fois ?",
+        "As-tu déjà dépensé de l'argent pour quelque chose de complètement inutile que tu regrettes ?",
+        "Quel est le pire conseil que tu aies suivi ?",
+        "Quel est le film ou la série que tu as abandonné sans jamais terminer ?",
+        "Quelle est la chose la plus bizarre qui te fasse peur mais que tout le monde trouve normale ?",
+        "Quel est le souvenir que tu racontes souvent mais qui s'est probablement embelli avec le temps ?",
+        "Quelle est la chose que tu penses vouloir mais que tu n'oses pas demander ?",
+        "Quelle est la plus petite chose qui te met de bonne humeur instantanément ?",
+        "Quel est ton péché mignon le plus inavouable ?",
+        "Quelle est la chose la plus inutile que tu saches faire parfaitement ?",
+        "Si tu devais choisir un autre prénom pour toi-même, ce serait lequel et pourquoi ?",
+        "Quel est l'endroit où tu te sens le plus toi-même ?",
+        "Quelle est la plus grande différence entre toi tel que tu te vois et toi tel que les autres te voient ?",
+        "Quel est le truc que tu fais quand tu es énervé mais que tu n'avoueras jamais ?",
+        "Quelle est la chose dont tu t'es longtemps vanté mais qui était en réalité exagérée ?",
+        "Quel est le truc le plus créatif que tu aies fait quand tu t'ennuyais ?",
+        "Quelle est la compétence que tu aimes à penser avoir mais qui est probablement surestimée ?",
+        "Quel est le truc le plus bizarre que tu aies dans ta chambre ?",
+        "Quelle est la chose que tu fais différemment des autres et que tu penses être la bonne façon ?",
+        "Quel est le souvenir le plus marquant de tes vacances les plus nulles ?",
+        "Quel est le personnage fictif avec lequel tu t'identifies le plus ?",
+      ]
+    },
+
+    soft: {
+      action: [
+        "Envoie un message à la 3ème personne de tes contacts : juste '🦆'.",
+        "Laisse quelqu'un fouiller ton téléphone pendant 1 minute.",
+        "Montre la dernière photo prise sur ton téléphone sans trier.",
+        "Lis tes 3 derniers messages envoyés à voix haute.",
+        "Appelle un ami et chante-lui Joyeux Anniversaire même si c'est pas son anniversaire.",
+        "Poste une photo de toi maintenant en story sans filtre.",
+        "Montre la dernière personne que t'as googlée.",
+        "Lis ton dernier DM Instagram à voix haute.",
+        "Envoie 'Je pense à toi ❤️' à quelqu'un au hasard dans tes contacts. Montre la réponse.",
+        "Fais une déclaration dramatique à un joueur de ton choix.",
+        "Laisse un joueur écrire quelque chose sur ta main avec un stylo.",
+        "Montre tes 5 applications les plus utilisées.",
+        "Laisse quelqu'un lire tes notifs pendant 30 secondes.",
+        "Envoie le GIF le plus nul de ta bibliothèque à la dernière personne de ta liste.",
+        "Montre le contenu de ton dernier panier abandonné en ligne.",
+        "Fais la danse la plus ridicule possible pendant 30 secondes.",
+        "Dis quelque chose de gentil à chaque joueur en 30 secondes.",
+        "Montre le dernier mème que tu as envoyé ou reçu.",
+        "Lis la dernière note dans ton téléphone à voix haute.",
+        "Laisse quelqu'un aller dans tes playlists Spotify ou Apple Music.",
+        "Montre la dernière conversation que t'as eue avec ton ou ta crush.",
+        "Fais un aveu honteux devant tout le groupe.",
+        "Laisse quelqu'un modifier ta bio Instagram pour la soirée.",
+        "Envoie un vocal bizarre à quelqu'un au hasard dans tes contacts.",
+        "Fais semblant d'être amoureux d'un objet dans la pièce et déclare-toi.",
+        "Appelle quelqu'un et parle uniquement en rimes pendant 30 secondes.",
+        "Fais un bisou sur la joue du joueur à ta gauche.",
+        "Montre tes applications cachées ou dans des dossiers.",
+        "Laisse un joueur changer ton fond d'écran pour la nuit.",
+        "Dis le premier mot qui te vient en tête pour chaque joueur.",
+        "Fais semblant d'interviewer la personne à ta droite comme une star de cinéma.",
+        "Appelle ta mère/père et dis 'j'ai quelque chose d'important à te dire' puis dis une blague nulle.",
+        "Montre les 5 dernières personnes que t'as appelées.",
+        "Laisse quelqu'un fouiller ton historique YouTube pendant 30 secondes.",
+        "Fais une imitation d'un joueur du groupe, les autres doivent deviner qui.",
+        "Montre ta photo de profil la plus cringey de ton historique.",
+        "Lis à voix haute le dernier message envoyé à ta mère.",
+        "Fais une confidence que tu n'avais jamais dite au groupe.",
+        "Montre combien d'heures de temps d'écran tu as fait cette semaine.",
+        "Laisse quelqu'un écrire un post en ton nom (sans publier si tu veux).",
+        "Fais une caricature verbale de quelqu'un dans la pièce sans le nommer — les autres devinent.",
+        "Montre la chose la plus ridicule dans ta liste de favoris en ligne.",
+        "Dis ta pire excuse pour avoir évité quelqu'un.",
+        "Envoie un 'tu m'as manqué' à quelqu'un que t'as pas vu depuis longtemps.",
+        "Fais 3 pompes avec quelqu'un assis sur ton dos.",
+        "Montre le dernier screenshot que tu as pris.",
+        "Lis à voix haute la dernière chose que tu as cherchée sur Google Maps.",
+        "Montre ta liste de lecture ou watch list et explique chaque truc bizarre.",
+        "Fais semblant d'être un vendeur sur un marché qui vend la personne à ta droite.",
+        "Laisse quelqu'un choisir ta prochaine photo de profil dans ton album.",
+        "Envoie 'on se voit quand ?' à une personne que tu as négligée.",
+        "Fais semblant de passer une audition pour un rôle dramatique pendant 30 secondes.",
+        "Montre ton écran d'accueil sans cacher quoi que ce soit.",
+        "Laisse quelqu'un te donner un surnom et tu l'utilises jusqu'à la fin de la soirée.",
+        "Imite comment tu te comportes sur un premier rendez-vous.",
+        "Appelle quelqu'un et ne parle qu'en chuchotant sans explication.",
+        "Dis à chaque joueur quelque chose que tu penses d'eux mais que tu n'as jamais dit.",
+        "Montre la vidéo la plus bizarre de ta galerie.",
+        "Fais une pub de 30 secondes pour ton propre personnage.",
+        "Envoie 'j'ai quelque chose à te dire' à un contact au hasard. Ne réponds pas avant 5 minutes.",
+        "Laisse quelqu'un écrire un message en ton nom et tu dois l'envoyer (rien de méchant).",
+        "Poste un truc embarrassant sur tes stories pendant 5 minutes minimum.",
+        "Fais semblant d'être en direct live pendant 1 minute.",
+        "Lis le dernier commentaire que tu as laissé sur les réseaux.",
+        "Montre ce que tu avais prévu de faire ce soir si tu n'étais pas là.",
+        "Dis le nom de la personne que tu as le plus mentionné cette semaine dans tes conversations.",
+        "Fais un discours de 30 secondes sur pourquoi tu es irrésistible.",
+        "Montre la dernière chose que tu as likée sur les réseaux.",
+        "Laisse quelqu'un répondre au prochain message que tu recevras.",
+        "Fais une révélation sur quelque chose que tu as toujours voulu faire mais jamais osé.",
+        "Dis le truc le plus gênant que tu aies jamais fait pour quelqu'un qui te plaisait.",
+        "Montre ton mémo vocal le plus bizarre.",
+        "Appelle quelqu'un et demande-lui de te raconter sa journée comme si c'était un film d'action.",
+        "Fais semblant d'être une publicité télévisée pour toi-même.",
+        "Envoie le dernier selfie de ta galerie à tout le groupe.",
+        "Laisse quelqu'un swiper dans tes photos récentes pendant 30 secondes.",
+        "Dis le nom de trois personnes avec qui tu aurais pu sortir mais tu n'as pas osé.",
+        "Montre la notification la plus embarrassante que tu aies reçue cette semaine.",
+        "Fais un compliment sincère à chaque personne dans le groupe.",
+        "Envoie 'j'avais quelque chose d'important à te dire mais j'ai oublié 🙃' à quelqu'un.",
+        "Montre le dernier voice note que tu as reçu.",
+        "Lis le dernier mail que tu as envoyé à voix haute avec émotion.",
+        "Imite comment tu parles quand tu essaies d'impressionner quelqu'un.",
+        "Montre le dernier truc que tu as acheté en ligne.",
+        "Fais semblant d'être une influenceuse qui fait une review de la pièce.",
+        "Laisse quelqu'un choisir un contact et tu dois lui envoyer un compliment sincère.",
+        "Montre ta liste de souhaits Amazon ou équivalent.",
+        "Dis la chose la plus honnête que tu penses de quelqu'un dans la pièce.",
+        "Fais une photo avec le groupe dans la position la plus artistique possible.",
+        "Envoie 'Salut, comment tu vas ?' à quelqu'un à qui tu n'as pas parlé depuis 6 mois.",
+        "Lis tes 5 derniers emojis envoyés et explique pourquoi chacun.",
+        "Montre ton historique d'achat en ligne des 3 derniers mois.",
+        "Laisse quelqu'un regarder tes conversations Snapchat pendant 30 secondes.",
+        "Fais une démonstration de ta célébration quand quelqu'un t'envoie un message que t'attendais.",
+        "Dis le truc le plus nul que t'as fait par peer pressure.",
+        "Montre le truc le plus louche que tu aies dans tes notes téléphone.",
+        "Laisse quelqu'un choisir une story à mettre en favoris sur ton compte.",
+      ],
+      verite: [
+        "Quel est le mensonge que tu répètes le plus souvent ?",
+        "Tu as déjà stalké un ex sur les réseaux ? Combien de temps ?",
+        "Quelle est ta plus grande insécurité physique ?",
+        "À qui as-tu menti récemment et pourquoi ?",
+        "Quelle est la chose la plus embarrassante sur ton téléphone en ce moment ?",
+        "Tu as déjà lu les messages de quelqu'un sans autorisation ?",
+        "Quelle est la chose la plus cringey que tu aies postée et supprimée ?",
+        "Quel est ton point faible le plus gênant ?",
+        "Quelle est la jalousie la plus ridicule que tu aies ressentie ?",
+        "Quelle est la rumeur qu'on a répandue sur toi qui était vraie ?",
+        "Quel est le truc le plus cher que tu aies brisé et caché sans le dire ?",
+        "Tu as déjà fait semblant d'être malade pour éviter quelqu'un ? Qui et pourquoi ?",
+        "Quelle est la chose que tu n'oserais jamais poster sur les réseaux sociaux ?",
+        "Tu as déjà pris de l'argent dans le portefeuille de tes parents ?",
+        "Quel est le pire cadeau que tu aies reçu et pour lequel tu as quand même remercié ?",
+        "T'as déjà ghosté quelqu'un ? Pourquoi et tu en es fier ?",
+        "Quelle application sur ton téléphone doit rester secrète et pourquoi ?",
+        "Quelle est la chose la plus stupide que t'aies faite pour impressionner quelqu'un ?",
+        "Quel est le mensonge le plus audacieux que tu aies dit et à qui ?",
+        "Tu as déjà dit du mal d'un ami présent dans cette pièce ? De qui et de quoi ?",
+        "T'as déjà fui une situation en prétextant une urgence inventée ?",
+        "Quel est le truc que tu ferais si personne ne le savait jamais ?",
+        "T'as déjà triché sur un test ou un examen ? Comment ?",
+        "Quelle est la chose la plus irrationnelle que tu as faite par jalousie ?",
+        "Quelle est la pire chose que tu aies écrite sur quelqu'un en privé ?",
+        "As-tu déjà fait semblant de ne pas voir quelqu'un dans la rue pour l'éviter ?",
+        "Quelle est la chose la plus embarrassante qui te soit arrivée en soirée ?",
+        "As-tu déjà menti sur quelque chose pour paraître plus intéressant ?",
+        "Quelle est ta honte secrète la plus profonde ?",
+        "Quel est le truc que tu caches à tes parents depuis longtemps ?",
+        "As-tu déjà créé un faux profil ou utilisé un faux nom en ligne ?",
+        "Quelle est la décision la plus impulsive que tu aies prise sous le coup de l'émotion ?",
+        "As-tu déjà volé quelque chose, même petit ?",
+        "Quel est le secret que tu gardes depuis le plus longtemps ?",
+        "T'as déjà envoyé un message à la mauvaise personne et paniqué ?",
+        "Quelle est la chose la plus mesquine que tu aies faite à quelqu'un ?",
+        "As-tu déjà fait semblant d'être occupé pour ne pas répondre à quelqu'un ?",
+        "Quelle est la chose la plus embarrassante que tu aies dite à quelqu'un que tu aimais bien ?",
+        "T'as déjà copié sur quelqu'un et prétendu que c'était ton idée ?",
+        "Quelle est la chose que tu regrettes le plus d'avoir dit à quelqu'un ?",
+        "As-tu déjà lu le journal intime ou les messages privés de quelqu'un ?",
+        "Quel est le mensonge le plus récent que tu as dit à un ami proche ?",
+        "Quelle est la chose la plus gênante que quelqu'un ait découverte sur toi ?",
+        "T'as déjà utilisé quelqu'un pour arriver à tes fins ?",
+        "Quelle est la chose dont tu es le moins fier dans ton historique de relations ?",
+        "Quel est le pire commentaire que tu aies laissé anonymement en ligne ?",
+        "T'as déjà volé une idée à quelqu'un et présenté ça comme la tienne ?",
+        "Quelle est la plus grande trahison que tu aies commise envers un ami ?",
+        "Quelle est la chose la plus égoïste que tu aies faite récemment ?",
+        "T'as déjà répandu une rumeur sur quelqu'un ? Laquelle ?",
+        "As-tu déjà été tellement jaloux que tu aies fait quelque chose dont tu n'es pas fier ?",
+        "Quel est le comportement que tu caches quand tu es en couple ?",
+        "T'as déjà préféré mentir plutôt que d'affronter une situation difficile ?",
+        "Quelle est la chose la plus naïve que tu aies crue sur quelqu'un ?",
+        "As-tu déjà fait semblant de t'intéresser à quelqu'un juste pour en tirer quelque chose ?",
+        "Quelle est la chose la plus immature que tu fasses encore à ton âge ?",
+        "T'as déjà pris le crédit d'une idée qui n'était pas la tienne ?",
+        "Quel est le truc que tu fais quand tu es seul qui te ferait honte si on te voyait ?",
+        "As-tu déjà fait semblant d'aimer quelque chose que tu détestes pour rentrer dans un groupe ?",
+        "Quelle est la chose que tu ferais différemment si tu recommençais une relation passée ?",
+        "Quel est le secret d'un ami que tu as du mal à garder ?",
+        "Quelle est la personne que tu as le plus déçue dans ta vie ?",
+        "T'as déjà menti sur ta situation amoureuse pour impressionner quelqu'un ?",
+        "Quelle est la chose la plus égoïste que tu aies pensé faire mais que tu n'as finalement pas faite ?",
+        "Quel est le truc que tu évites de te rappeler parce que tu en es trop honteux ?",
+        "As-tu déjà dit à quelqu'un que tu l'aimais sans vraiment le penser ?",
+        "Quelle est la chose la plus bizarre que tu aies faite par ennui ?",
+        "T'as déjà utilisé une excuse bidon pour rompre avec quelqu'un ?",
+        "Quel est le souvenir que tu n'as jamais partagé parce que tu en es trop gêné ?",
+        "As-tu déjà comploté avec quelqu'un contre une autre personne ?",
+        "Quelle est la chose dont tu te vantes mais qui est en réalité beaucoup moins impressionnante ?",
+        "T'as déjà utilisé quelqu'un pour rendre un autre jaloux ?",
+        "As-tu déjà commis une petite fraude, même anodine ? Laquelle ?",
+        "Quelle est la chose la plus ridicule pour laquelle tu as boudé ?",
+        "T'as déjà dramatisé une situation pour attirer la sympathie ?",
+        "Quel est le truc que tu aurais dû dire à quelqu'un mais que tu n'as jamais dit ?",
+        "As-tu déjà fait croire à quelqu'un que tu étais meilleur que tu ne l'étais dans quelque chose ?",
+        "T'as déjà mal parlé de quelqu'un à ses proches ?",
+        "Quel est ton plus grand regret social ?",
+        "As-tu déjà évité quelqu'un parce qu'il voulait te parler d'un problème ?",
+        "Quelle est la chose que tu n'as jamais avouée à tes meilleurs amis ?",
+        "T'as déjà prétendu ne pas savoir quelque chose pour éviter une responsabilité ?",
+        "As-tu déjà critiqué quelqu'un pour quelque chose que tu fais toi-même ?",
+        "Quelle est la chose la plus difficile à admettre sur toi-même ?",
+        "T'as déjà menti à un médecin sur tes habitudes ?",
+        "As-tu déjà gaspillé une opportunité à cause de la paresse ou de la peur ?",
+        "Quelle est la chose dont tu te seras toujours justifié alors qu'au fond tu sais que t'avais tort ?",
+      ]
+    },
+
+    normal: {
+      action: [
+        "Envoie un message romantique au dernier contact de ta liste.",
+        "Lis à voix haute le dernier message envoyé à ta mère.",
+        "Échange ton téléphone avec un joueur pendant 2 minutes — il peut tout voir.",
+        "Laisse la personne à ta droite envoyer un message au destinataire de son choix depuis ton téléphone.",
+        "Montre les 5 dernières personnes appelées sur ton téléphone.",
+        "Envoie 'j'ai quelque chose à te dire sur nous...' à la dernière personne à qui tu as menti.",
+        "Appelle un ami et imite quelqu'un qu'il connaît. Il doit deviner qui.",
+        "Montre le contenu de ton historique de recherche des dernières 24h.",
+        "Poste une photo de toi sans filtre en ce moment sur tes réseaux.",
+        "Dis un secret que tu n'as jamais dit à personne dans ce groupe.",
+        "Laisse un joueur lire ta dernière conversation entière de l'appli de messagerie de son choix.",
+        "Montre le dernier contact que tu as supprimé de ton téléphone et dis pourquoi.",
+        "Fais lire tes DMs à un joueur — il choisit la conversation.",
+        "Raconte ta pire soirée en détail.",
+        "Montre ta galerie photo sans rien cacher pendant 1 minute.",
+        "Imite parfaitement quelqu'un que tout le monde dans le groupe connaît.",
+        "Dis la chose la plus honnête que tu penses d'un joueur — sans filtre.",
+        "Laisse quelqu'un envoyer un message à ton ou ta crush depuis ton téléphone.",
+        "Fais 3 pompes avec quelqu'un assis sur ton dos.",
+        "Montre le dernier mème embarrassant que t'as envoyé.",
+        "Lis à voix haute le dernier sexto ou message flirty que tu as envoyé.",
+        "Raconte comment s'est passée ta première rupture.",
+        "Envoie 'on devrait se voir' à quelqu'un que tu as évité.",
+        "Montre combien de groupes WhatsApp tu as en sourdine.",
+        "Laisse quelqu'un regarder tes follow/abonnements pendant 1 minute.",
+        "Fais une imitation de ton comportement quand tu dragues.",
+        "Dis le prénom de la personne que tu trouves la plus attirante dans le groupe.",
+        "Appelle la dernière personne qui t'a rappelé sans décrocher et explique-toi.",
+        "Montre ton écran d'accueil sans rien cacher.",
+        "Laisse quelqu'un fouiller tes stories en archive.",
+        "Lis ton dernier échange avec un ex à voix haute.",
+        "Envoie 'je t'aime' à la 7ème personne de ton répertoire. Montre la réaction.",
+        "Fais un discours de 1 minute sur pourquoi tu mérites un award au sein de ce groupe.",
+        "Montre la dernière photo que tu as likée sur Instagram.",
+        "Laisse quelqu'un écrire quelque chose sur ton bras que tu gardes toute la soirée.",
+        "Dis le truc le plus embarrassant que t'aies fait par amour ou par intérêt pour quelqu'un.",
+        "Montre tes tickets ou dépenses récentes sur ton application bancaire.",
+        "Envoie le dernier selfie de ta galerie sans regarder ce que c'est.",
+        "Appelle quelqu'un et prétends que c'est ton agent qui t'appelle. Improvise.",
+        "Laisse quelqu'un parcourir tes notes téléphone pendant 30 secondes.",
+        "Raconte ta pire interaction sur une appli de dating.",
+        "Montre le screenshot le plus louche dans ta galerie.",
+        "Dis la chose la plus mesquine que tu penses en ce moment sur quelqu'un d'absent.",
+        "Laisse quelqu'un voir tes playlists et il commente ce qu'il voit.",
+        "Envoie 'tu me manques' à quelqu'un à qui c'est vrai.",
+        "Fais une révélation que tu aurais gardée pour toi normalement.",
+        "Lis à voix haute le dernier voice note que tu as reçu.",
+        "Montre la notification la plus embarrassante que tu aies reçue cette semaine.",
+        "Laisse quelqu'un parcourir tes photos de profil sur tous tes réseaux.",
+        "Raconte ta plus grande fierté secrète que t'assumes pas publiquement.",
+        "Dis le nom du dernier contact avec qui tu as flirté.",
+        "Envoie 'il faut qu'on parle' sans rien ajouter à quelqu'un. Montre les réponses.",
+        "Montre les 3 premières applis que tu ouvres quand tu t'ennuies.",
+        "Laisse quelqu'un regarder ta liste de contacts et commenter les prénoms.",
+        "Fais une confession à voix haute que tu gardais pour toi.",
+        "Raconte comment tu gères une dispute. Mets en scène.",
+        "Montre le dernier truc que tu as commandé en livraison.",
+        "Laisse quelqu'un parcourir tes reels/tiktoks sauvegardés.",
+        "Lis le message le plus embarrassant que tu t'es envoyé à toi-même.",
+        "Montre ton temps d'écran hebdomadaire — l'honnêteté est requise.",
+        "Fais semblant de passer un entretien pour le job de 'meilleur ami du groupe'.",
+        "Envoie 'je pensais à toi' à la personne avec qui tu veux le moins parler.",
+        "Laisse quelqu'un répondre à ton prochain message reçu comme il le veut.",
+        "Montre la dernière chose que tu as googlelisée en navigation privée.",
+        "Raconte ta pire expérience de coincement romantique.",
+        "Dis ce que tu penses vraiment de l'ex d'un joueur présent.",
+        "Montre la dernière photo où tu t'es trouvé moche et pourquoi tu l'as quand même gardée.",
+        "Laisse quelqu'un rédiger un profil Tinder/Bumble pour toi.",
+        "Fais une imitation de la pire date que tu aies vécue.",
+        "Montre le dernier événement que tu as décliné sur les réseaux.",
+        "Envoie 'excuse-moi pour avant' à quelqu'un sans contexte. Montre sa réponse.",
+        "Laisse quelqu'un faire une recherche dans ta messagerie avec le mot de son choix.",
+        "Raconte comment s'est passé ton premier baiser.",
+        "Montre ta liste Spotify ou Apple Music la plus embarrassante.",
+        "Dis quelque chose que tu n'aurais normalement jamais le courage de dire ici.",
+        "Laisse quelqu'un modifier ton statut WhatsApp pour 1h.",
+        "Fais une imitation de ton comportement en mode 'je suis jaloux'.",
+        "Montre la conversation la plus longue dans ta messagerie et dis avec qui c'est.",
+        "Raconte le plan le plus tordu que tu aies mis en place.",
+        "Envoie 'est-ce qu'on peut parler ?' à quelqu'un que tu dois vraiment confronter.",
+        "Montre la dernière chose que tu as sauvegardée depuis les stories de quelqu'un.",
+        "Laisse quelqu'un lire tes commentaires Facebook des 3 dernières années.",
+        "Fais une déclaration honnête sur ce que tu cherches vraiment en ce moment.",
+        "Raconte ta pire expérience lors d'un malentendu romantique.",
+        "Montre ton dernier tchat avec quelqu'un que t'as draguée ou dragué.",
+        "Laisse quelqu'un passer 1 minute dans ta galerie — sans exception.",
+        "Dis le truc le plus wild que tu aies fait un soir de fête.",
+        "Envoie 'je t'admirais vachement à l'époque' à quelqu'un de ton passé.",
+        "Montre ta liste de gens que tu suis mais dont tu regardes jamais les stories.",
+        "Laisse quelqu'un choisir quelqu'un dans tes contacts et lui envoyer un GIF.",
+        "Fais la démonstration de comment tu t'endors après une soirée trop arrosée.",
+        "Montre le dernier abonnement en ligne que tu as oublié d'annuler.",
+        "Raconte ta pire blague qui est vraiment tombée à plat.",
+        "Laisse quelqu'un voir tes discussions de groupe les plus actives et les noms.",
+        "Envoie 'tu me dois encore une explication' à quelqu'un qui l'a méritée.",
+        "Montre le dernier truc que t'as regardé sur YouTube quand t'arrivais pas à dormir.",
+        "Fais semblant de donner un discours d'adieu théâtral au groupe.",
+      ],
+      verite: [
+        "Quelle est la chose la plus sombre de ton historique de recherche ?",
+        "Tu as déjà trahi la confiance de quelqu'un proche ? Raconte.",
+        "Quel est ton type exactement, et est-ce que quelqu'un dans ce groupe y correspond ?",
+        "Quelle est la chose la plus puérile que tu fais encore et que tu assumes pas ?",
+        "Tu as déjà volé quelque chose ? Quoi et à qui ?",
+        "Quel est le pire rendez-vous que tu aies eu ? Tout en détail.",
+        "Tu as déjà ghosté quelqu'un qui te plaisait ? Pourquoi ?",
+        "Quel est le mensonge le plus audacieux que tu aies dit à quelqu'un qui t'aime ?",
+        "Tu as déjà dit du mal de quelqu'un présent dans cette pièce ? De qui et de quoi ?",
+        "Quelle est ta honte secrète la plus profonde en matière de comportement amoureux ?",
+        "T'as déjà fui une situation en prétextant une urgence inventée ?",
+        "T'as déjà fréquenté deux personnes en même temps sans que ni l'une ni l'autre le sache ?",
+        "Quelle est la rumeur sur toi qui était vraie ?",
+        "T'as déjà créé un faux compte pour stalker quelqu'un ?",
+        "Quelle est la chose la plus dark que tu aies pensée et jamais dite à voix haute ?",
+        "T'as déjà menti sur quelque chose d'important à ton ou ta partenaire ?",
+        "Quel est le truc le plus embarrassant que quelqu'un ait découvert sur toi ?",
+        "T'as déjà utilisé quelqu'un pour rendre quelqu'un d'autre jaloux ?",
+        "Quelle est la chose la plus lâche que tu aies faite dans une relation ?",
+        "Quel est ton vrai ressenti sur quelqu'un dans ce groupe que tu gardes habituellement pour toi ?",
+        "T'as déjà été avec quelqu'un juste pour pas être seul ?",
+        "Quelle est la chose la plus bizarre qui t'ait attiré et que tu assumes pas ?",
+        "T'as déjà eu des sentiments pour l'ex de quelqu'un que tu connais ?",
+        "Quelle est la chose la plus honteuse que tu aies faite par désespoir en amour ?",
+        "T'as déjà menti à quelqu'un sur ta situation pour obtenir ce que tu voulais ?",
+        "Quelle est la décision romantique dont tu n'es pas fier mais que tu referais ?",
+        "T'as déjà évité quelqu'un de ta famille parce que tu lui avais quelque chose à cacher ?",
+        "Quelle est la chose la plus mesquine que tu aies pensée d'un ami quand il réussissait mieux ?",
+        "T'as déjà espionné quelqu'un sur les réseaux pour vérifier ce qu'il faisait ?",
+        "Quel est le secret que tu gardes depuis le plus longtemps et que tu n'as dit à personne ?",
+        "T'as déjà eu un geste ou une pensée dont tu te demandes encore si c'est passé inaperçu ?",
+        "Quelle est la chose la plus naïve que tu aies faite parce que tu étais trop amoureux ?",
+        "T'as déjà rompu de manière vraiment lâche ? Raconte.",
+        "Quelle est la chose la plus stupide que tu aies faite pour être accepté dans un groupe ?",
+        "T'as déjà joué la victime alors que t'étais clairement dans l'erreur ?",
+        "Quelle est la chose que tu n'as jamais pu pardonner mais que tu fais semblant d'avoir oubliée ?",
+        "T'as déjà partagé un secret d'un ami parce que tu étais en colère ?",
+        "Quelle est la chose que tu continues de faire même si tu sais que c'est mauvais pour toi ?",
+        "T'as déjà fait semblant d'être quelqu'un d'autre sur internet pour voir une réaction ?",
+        "Quel est le truc le plus difficile que tu aies dû admettre à quelqu'un ?",
+        "T'as déjà préféré quelqu'un d'autre mais tu es resté dans une relation par confort ?",
+        "Quelle est la chose que tu veux vraiment en ce moment mais que tu n'oses pas demander ?",
+        "T'as déjà dit 'ça va' alors que ça n'allait vraiment pas — et à qui ?",
+        "Quel est le comportement toxique que tu reconnais avoir mais que tu n'as pas encore changé ?",
+        "T'as déjà utilisé la jalousie comme outil de manipulation ?",
+        "Quelle est la chose la plus difficile que tu aies traversée que personne ici ne sait ?",
+        "T'as déjà fait semblant d'aller mieux pour arrêter d'inquiéter les gens ?",
+        "Quelle est la chose la plus sombre qui te soit passée par la tête sous le coup de la colère ?",
+        "T'as déjà fait quelque chose que tu savais être une erreur mais tu n'as pas pu t'en empêcher ?",
+        "Quel est le truc le plus courageux que tu aies fait mais que tu n'assumes pas parce que ça s'est mal passé ?",
+        "T'as déjà blessé quelqu'un délibérément en sachant exactement où ça ferait mal ?",
+        "Quelle est la chose dont tu te rappelles souvent avec honte mais dont tu n'as jamais parlé ?",
+        "T'as déjà refusé d'aider quelqu'un et regretté ensuite ?",
+        "Quelle est la relation que tu regrettes d'avoir laissée partir ?",
+        "T'as déjà dit à quelqu'un ce qu'il voulait entendre au lieu de la vérité ?",
+        "Quel est le truc que tu te jures toujours de faire mais que tu repousses indéfiniment ?",
+        "T'as déjà profité de la faiblesse de quelqu'un pour en tirer avantage ?",
+        "Quelle est la chose la plus difficile que t'aies dite à quelqu'un et dont tu ne sais toujours pas si t'avais raison ?",
+        "T'as déjà fait croire à quelqu'un que tout allait bien alors que tu te décomposais de l'intérieur ?",
+        "Quelle est la chose la plus irrationnelle que tu aies crue parce que tu voulais y croire ?",
+        "T'as déjà sabordé ta propre chance parce que t'avais peur de réussir ?",
+        "Quelle est la chose la plus difficile que tu aies due accepter sur toi-même ?",
+        "T'as déjà fait semblant d'aimer quelqu'un pour pas le blesser ?",
+        "Quel est le moment où tu as le plus manqué de courage dans ta vie ?",
+        "T'as déjà commis quelque chose que tu ne diras jamais à personne ?",
+        "Quelle est la chose la plus difficile que tu aies perdue et dont tu te remets pas vraiment ?",
+        "T'as déjà préféré la version de toi que les autres voient à celle que tu connais vraiment ?",
+        "Quel est le truc que tu aurais voulu dire à quelqu'un avant qu'il disparaisse de ta vie ?",
+        "T'as déjà fait souffrir quelqu'un sans en prendre conscience sur le moment ?",
+        "Quelle est la chose dont tu auras toujours du mal à parler mais dont tu veux bien dire juste un mot ?",
+        "T'as déjà choisi la mauvaise personne en sachant parfaitement que c'était la mauvaise ?",
+        "Quel est le truc le plus difficile que tu n'assumes toujours pas mais que tu devrais assumer ?",
+        "T'as déjà laissé partir quelqu'un que t'aimais parce que t'avais trop peur ?",
+        "Quelle est la chose la plus difficile que tu traverses en ce moment ?",
+        "T'as déjà dit 'je t'aime' sans le penser entièrement ?",
+        "Quel est le plus grand mensonge que tu te racontes à toi-même ?",
+        "T'as déjà blessé quelqu'un par lâcheté plutôt que par méchanceté ?",
+        "Quelle est la chose que tu n'aimes pas chez toi mais que tu acceptes de garder quand même ?",
+        "T'as déjà cherché quelque chose sur quelqu'un parce que tu voulais qu'il ait l'air moins bien ?",
+        "Quel est le sacrifice que tu aies fait pour quelqu'un qui ne l'a jamais su ?",
+        "T'as déjà mis fin à une relation parce que tu ne méritais pas d'être heureux à ce moment-là ?",
+        "Quelle est la chose que tu veux vraiment dire à quelqu'un ici mais que tu gardes pour toi ?",
+        "T'as déjà décidé de ne pas changer quelque chose chez toi alors que tu savais que tu devrais ?",
+        "Quelle est la chose la plus vraie que tu aies jamais dite à quelqu'un en te battant contre toi-même ?",
+        "T'as déjà compris trop tard que tu étais amoureux de quelqu'un ?",
+        "Quel est le moment où t'as le plus douté de ta valeur ?",
+        "T'as déjà laissé quelqu'un prendre le blâme à ta place ?",
+        "Quelle est la chose dont tu as le plus honte de ton comportement passé ?",
+        "T'as déjà prétendu être quelqu'un que tu n'es pas pour plaire à quelqu'un ?",
+        "Quelle est la chose que tu accepterais de faire différemment si tu pouvais revenir en arrière ?",
+        "T'as déjà rencontré quelqu'un qui t'a vraiment changé et tu ne le lui as jamais dit ?",
+        "Quelle est la chose la plus vraie que tu saches sur toi mais que tu n'assumes pas encore ?",
+      ]
+    },
+
+    hardcore: {
+      action: [
+        "Montre le texte le plus hot que tu aies jamais envoyé.",
+        "Laisse un joueur fouiller tes DMs pendant 2 minutes — aucune restriction.",
+        "Lis à voix haute ton dernier sexto en entier.",
+        "Fais un strip-tease de 30 secondes sur une musique choisie par les autres.",
+        "Retire un sous-vêtement sans enlever tes vêtements du dessus.",
+        "Laisse la personne à ta gauche te mettre un glaçon sous tes vêtements où elle veut.",
+        "Envoie 'J'ai envie de toi' au 5ème contact de ton répertoire. Montre la réponse.",
+        "Fais un lap dance de 30 secondes à quelqu'un du groupe.",
+        "Laisse quelqu'un te faire un suçon là où il le choisit.",
+        "Masse sensuellement les épaules de la personne de ton choix pendant 2 minutes.",
+        "Raconte ta première fois en détail. Tu peux changer les prénoms.",
+        "Montre la photo la plus osée que tu aies dans ton téléphone.",
+        "Prends une pose sexy et laisse tout le monde prendre une photo.",
+        "Lis à voix haute le dernier message que t'as envoyé à quelqu'un qui te plaît.",
+        "Fais deviner une position du Kamasutra uniquement par le mime.",
+        "Laisse quelqu'un te bander les yeux et devine qui te fait un bisou dans le cou.",
+        "Envoie un message vocal coquin à ton ex ou à ton crush si t'as pas d'ex.",
+        "Laisse quelqu'un lécher de la chantilly sur ton doigt.",
+        "Danse de manière provocante avec une bouteille ou un balai pendant 1 minute.",
+        "Fais semblant de draguer lourdement la personne à ta droite pendant 1 minute.",
+        "Enlève ton t-shirt et reste torse nu ou en soutien-gorge pendant 3 tours.",
+        "Laisse quelqu'un te mettre du rouge à lèvres les yeux fermés.",
+        "Fais un body shot (sel, shot, citron) sur le bras de quelqu'un.",
+        "Chuchote ton fantasme le plus inavouable à l'oreille de quelqu'un.",
+        "Appelle quelqu'un que tu as crushé et dis-lui.",
+        "Montre tes abonnements les plus honteux sur les réseaux.",
+        "Poste une confession osée en anonyme sur tes stories pendant 10 minutes.",
+        "Fais un french kiss avec ta main pendant 10 secondes devant tout le monde.",
+        "Laisse quelqu'un choisir un contact dans ton téléphone et envoie-lui 'tu me manques'.",
+        "Mime un orgasme de façon théâtrale devant tout le monde.",
+        "Dessine un cœur avec ton rouge à lèvres sur la joue de quelqu'un.",
+        "Prends une photo sexy (habillé mais suggestive) et mets-la en story pendant 10 minutes.",
+        "Laisse un joueur rédiger un profil Tinder pour toi et tu valides ou pas.",
+        "Embrasse la personne de ton choix sur la bouche si consentement.",
+        "Imite de manière très réaliste comment tu réagis pendant un moment intime.",
+        "Montre le dernier contact supprimé de ton téléphone et explique pourquoi.",
+        "Dis ouvertement si tu as déjà eu des sentiments pour quelqu'un dans ce groupe.",
+        "Fais une démonstration de ton meilleur 'regard de séducteur/séductrice'.",
+        "Laisse quelqu'un te bander les yeux et devine qui te fait un bisou sur la joue.",
+        "Raconte ton pire rat en détails avec mise en scène intégrale.",
+        "Dis le vrai prénom de la personne que tu trouves la plus attirante dans le groupe.",
+        "Montre la dernière photo que tu as sauvegardée d'une personne que tu kiffes.",
+        "Fais la démonstration de comment tu embrasses — sur ta main ou un coussin.",
+        "Envoie 'j'ai toujours voulu te dire quelque chose...' à quelqu'un que tu n'aurais pas osé contacter.",
+        "Laisse quelqu'un te donner un surnom très coquin que tu dois utiliser toute la soirée.",
+        "Décris en détail comment tu séduirais la personne à ta gauche si tu devais.",
+        "Montre la dernière chose que t'as regardée sur un site adulte si tu oses.",
+        "Lis à voix haute la description la plus hot d'une scène de roman ou série que tu gardes.",
+        "Laisse quelqu'un voir ta dernière commande en ligne sans restriction.",
+        "Fais semblant d'appeler la personne que tu trouves la plus sexy du groupe.",
+        "Laisse quelqu'un te masser les mains et les bras pendant 1 minute sans parler.",
+        "Montre combien de matchs non-répondus tu as sur tes applis de rencontre.",
+        "Décris de façon explicite ce que tu aimes le plus au lit en une phrase.",
+        "Envoie 'tu es dans mes pensées ce soir' à quelqu'un sans lui dire pourquoi.",
+        "Montre le dernier contenu adulte que t'as liké ou sauvegardé.",
+        "Laisse quelqu'un te chuchoter quelque chose d'osé à l'oreille — tu dois garder le même visage.",
+        "Fais un strip-tease de ton poignet en retirant une montre ou bracelet avec une lenteur extrême.",
+        "Raconte dans les détails le fantasme que tu gardes habituellement pour toi.",
+        "Dis ouvertement si tu as déjà pensé de manière sexuelle à quelqu'un dans ce groupe.",
+        "Montre le screenshot le plus compromettant de ta galerie.",
+        "Laisse quelqu'un te nourrir les yeux bandés avec quelque chose de sucré.",
+        "Fais semblant d'expliquer le Kamasutra à un public de débutants pendant 1 minute.",
+        "Montre ton appli de rencontre et laisse quelqu'un swiper à ta place pendant 1 minute.",
+        "Laisse quelqu'un parcourir ta galerie photo à la recherche de la photo la plus osée.",
+        "Raconte en détail ta plus mémorable soirée de débauche.",
+        "Fais la démonstration de ton meilleur baiser — sur un verre ou un objet.",
+        "Envoie un message très direct à quelqu'un que tu kiffes. Maintenant. Devant tout le monde.",
+        "Montre la conversation la plus flirty que t'as eue le mois dernier.",
+        "Laisse quelqu'un composer un message de drague et tu dois l'envoyer à qui il choisit.",
+        "Décris la scène de film ou de série qui t'a le plus excité.",
+        "Lis à voix haute ta description idéale d'une nuit parfaite.",
+        "Montre le profil de la dernière personne que tu as googlée de manière romantique.",
+        "Laisse quelqu'un lire tes messages dans une appli de rencontre.",
+        "Fais une démonstration de comment tu réagis quand tu reçois un message hot.",
+        "Raconte comment s'est passée ta meilleure nuit — en omettant les prénoms si tu veux.",
+        "Montre les 5 dernières personnes que t'as recherchées sur les réseaux de manière obsessionnelle.",
+        "Laisse quelqu'un choisir la position que tu dois mimer — sans bruit.",
+        "Décris en détail ce que tu ferais pendant une nuit avec la personne de tes rêves.",
+        "Montre ton classement personnel des joueurs du groupe du plus au moins attirant.",
+        "Envoie 'j'ai rêvé de toi cette nuit' à quelqu'un à qui c'est peut-être vrai.",
+        "Laisse quelqu'un parcourir tes achats sur une appli adulte ou lingerie.",
+        "Fais une démonstration de la façon dont tu mettrais quelqu'un dans l'ambiance.",
+        "Raconte ta pire performance au lit — avec humour requis.",
+        "Montre le dernier message que tu aurais regretté d'avoir envoyé.",
+        "Laisse quelqu'un rédiger un texto de rupture pour une relation imaginaire.",
+        "Décris ta plus grande honte sexuelle que tu ne racontes jamais.",
+        "Envoie 'est-ce que t'es libre ce soir ?' à quelqu'un pour qui c'est un peu vrai.",
+        "Montre ta liste de 'favoris' ou 'signets' si elle contient des choses hot.",
+        "Laisse quelqu'un lire ta dernière conversation avec quelqu'un qui te plaît.",
+        "Fais la démo de comment tu t'habilles quand tu veux plaire à quelqu'un.",
+        "Raconte la chose la plus scandaleuse que tu aies faite dans un lieu public.",
+        "Montre la conversation la plus longue que tu aies avec quelqu'un et explique qui c'est.",
+        "Laisse quelqu'un composer une annonce de toi sur un site de rencontre imaginaire.",
+        "Décris explicitement ce que tu considères comme la meilleure chose au lit.",
+        "Envoie le message le plus osé de ton historique à un joueur au hasard par screenshot.",
+        "Fais une démonstration de ton meilleur 'regard qui en dit long'.",
+        "Raconte en 2 minutes la soirée la plus folle dont tu gardes un souvenir honteux mais assumé.",
+      ],
+      verite: [
+        "Quel est ton fantasme le plus secret que tu n'as jamais réalisé ?",
+        "Tu as déjà eu un rêve érotique avec quelqu'un présent ce soir ? Qui ?",
+        "Quelle est la chose la plus coquine que tu aies faite en public ?",
+        "Combien de partenaires as-tu vraiment eu ? Sois honnête.",
+        "Quel est l'endroit le plus insolite où tu as fait l'amour ?",
+        "As-tu déjà simulé un orgasme ? Pourquoi et combien de fois ?",
+        "Quel est le mensonge le plus gros que tu aies dit à un partenaire sexuel ?",
+        "As-tu déjà été attiré par quelqu'un du même sexe ?",
+        "Quelle est ta position préférée au lit et pourquoi ?",
+        "As-tu déjà regardé quelqu'un se déshabiller sans qu'il le sache ?",
+        "Quel est ton plus grand turn-on — ce qui t'excite instantanément ?",
+        "As-tu déjà fantasmé sur un prof ou un patron ?",
+        "Quelle est la chose la plus gênante qui te soit arrivée pendant l'acte ?",
+        "As-tu déjà couché avec quelqu'un le premier soir ? Raconte.",
+        "Quelle partie de ton corps aimes-tu le plus qu'on te touche ?",
+        "As-tu déjà envoyé une photo dénudée ? À qui ?",
+        "As-tu déjà eu un plan à trois ? Si non, tu y as pensé avec qui du groupe ?",
+        "Quelle est la chose la plus bizarre qui t'ait excité ?",
+        "As-tu déjà menti sur ton nombre de partenaires ? Dans quel sens ?",
+        "Quelle est ta plus grosse honte sexuelle que tu assumes en privé ?",
+        "As-tu déjà été dans une relation ouverte ? Ça t'a convenu ou pas ?",
+        "As-tu déjà été surpris en plein acte ? Raconte.",
+        "Quelle est la chose la plus folle qu'on t'ait demandée au lit ?",
+        "As-tu déjà embrassé quelqu'un juste pour rendre quelqu'un d'autre jaloux ?",
+        "Avec qui dans cette pièce aimerais-tu avoir une aventure d'un soir ?",
+        "Quelle est la partie du corps que tu trouves la plus sexy chez un partenaire ?",
+        "As-tu déjà regardé un film porno en pensant à quelqu'un que tu connais ?",
+        "Quelle est la chose que tu aimerais le plus essayer au lit mais que tu n'as pas osée ?",
+        "As-tu déjà eu une relation purement sexuelle (friends with benefits) ?",
+        "Quelle est la chose la plus importante pour toi pendant un rapport — connexion ou plaisir physique ?",
+        "As-tu déjà utilisé un sex toy ? Tes impressions ?",
+        "Quel est ton 'turn-off' absolu, le vrai tue-l'amour ?",
+        "Décris ton/ta partenaire idéal(e) au lit en 3 mots.",
+        "As-tu déjà eu une attirance pour quelqu'un de non-conventionnel selon tes critères ?",
+        "Quelle odeur ou parfum te rend dingue instantanément ?",
+        "Si tu pouvais passer une nuit avec quelqu'un de cette pièce, ce serait qui ?",
+        "As-tu déjà eu une expérience sexuelle dans un lieu public ou semi-public ?",
+        "Qu'est-ce qui te donne le plus confiance en toi au lit ?",
+        "Quelle est la chose la plus importante que tu aies apprise sur ta propre sexualité ?",
+        "As-tu déjà utilisé de la nourriture pendant des jeux amoureux ?",
+        "Quelle est ta limite absolue, le truc que tu ne feras jamais au lit ?",
+        "Si tu devais noter ta vie sexuelle actuelle sur 10, quelle note mettrais-tu ?",
+        "Y a-t-il quelque chose que tu aimerais expérimenter mais que tu n'as jamais osé demander ?",
+        "Quel film ou quelle scène de série t'a le plus mis dans l'ambiance dans ta vie ?",
+        "As-tu déjà envoyé un sexto ? Décris le contexte.",
+        "Quelle est la chose la plus hard-core que tu aies tentée et que tu ne referais pas ?",
+        "As-tu déjà été dans une situation où tu aurais dû t'arrêter mais tu as continué ?",
+        "Quelle est la chose la plus impulsive que tu aies faite par désir ?",
+        "Quel est le fantasme récurrent que tu as mais que tu penses ne jamais pouvoir réaliser ?",
+        "As-tu déjà eu une nuit avec quelqu'un dont tu ne connaissais pas le prénom ?",
+        "Quelle est la chose la plus osée que tu aies écrite à quelqu'un ?",
+        "As-tu déjà été pris en flag dans une situation compromettante ? Raconte.",
+        "Quelle est la chose la plus difficile à admettre sur ta vie sexuelle ?",
+        "T'as déjà fait quelque chose au lit en te demandant si c'était normal ?",
+        "Quelle est la frontière que tu as franchie et que tu assumes entièrement ?",
+        "As-tu déjà eu une attirance pour quelqu'un de beaucoup plus vieux ou beaucoup plus jeune ?",
+        "Quel est le souvenir le plus intense que tu gardes d'une nuit avec quelqu'un ?",
+        "T'as déjà fait quelque chose que la personne avec qui tu étais n'a pas su ?",
+        "Quelle est la chose la plus inattendue que t'a dite quelqu'un au lit ?",
+        "T'as déjà trompé quelqu'un ? Raconte sans te justifier.",
+        "Quelle est la situation la plus gênante que t'as vécue dans un contexte romantique ou sexuel ?",
+        "As-tu déjà réalisé pendant l'acte que tu n'avais pas envie d'être là ?",
+        "Quelle est la chose la plus dangereuse que tu aies faite sous le coup du désir ?",
+        "T'as déjà eu une relation avec quelqu'un alors que tu aimais quelqu'un d'autre ?",
+        "Quel est le fantasme que tu jugerais chez quelqu'un d'autre mais que tu as aussi ?",
+        "T'as déjà pris de l'initiative alors que tu savais que c'était mal choisi comme moment ?",
+        "Quelle est la chose la plus honnête que tu peux dire sur tes désirs en ce moment ?",
+        "As-tu déjà eu des sentiments pour quelqu'un après une nuit sans que l'autre le sache ?",
+        "Quelle est la chose la plus impudique que tu aies dite à quelqu'un ?",
+        "T'as déjà regretté d'avoir couché avec quelqu'un dès le lendemain matin ?",
+        "Quelle est la chose la plus hard-core que tu aies regardée et que tu assumes ?",
+        "T'as déjà utilisé la sexualité pour obtenir quelque chose ?",
+        "Quelle est la chose que tu ne ferais jamais sober mais que tu as faite et assumée après ?",
+        "As-tu déjà eu une relation avec quelqu'un dont tu n'aimais pas vraiment la personnalité ?",
+        "Quel est le truc le plus provocateur que tu aies dit à quelqu'un pour le mettre dans l'ambiance ?",
+        "As-tu déjà aimé quelque chose que tu avais dit que tu n'aimerais jamais ?",
+        "Quelle est la chose la plus intense que tu aies ressentie physiquement avec quelqu'un ?",
+        "T'as déjà envoyé quelque chose à quelqu'un que tu as regretté d'avoir envoyé le lendemain ?",
+        "Quelle est la chose la plus difficile que tu aies avouée à quelqu'un avec qui tu étais ?",
+        "T'as déjà réalisé trop tard que quelqu'un était fou de toi et tu n'avais rien vu ?",
+        "Quel est le truc le plus déstabilisant qu'on t'ait dit au lit ?",
+        "As-tu déjà eu une conversation très honnête sur le sexe avec quelqu'un et regretté ta franchise ?",
+        "Quelle est la chose la plus difficile que tu aies dû refuser alors que tu en avais envie ?",
+        "T'as déjà fait quelque chose de sexuellement inattendu dont tu es secrètement fier ?",
+        "Quel est ton comportement le plus différent entre ce que tu laisses paraître et ce que tu es vraiment au lit ?",
+        "As-tu déjà eu une attirance inexpliquée pour quelqu'un que tu n'aurais normalement jamais imaginé ?",
+        "T'as déjà fait une chose au lit que tu as ensuite niée ?",
+        "Quelle est la chose la plus crue que tu aies dite ou entendue dans un contexte intime ?",
+        "As-tu déjà été avec quelqu'un juste parce que tu t'ennuyais ?",
+        "Quelle est la chose la plus vraie que tu puisses dire sur ce que tu cherches vraiment dans une relation ?",
+        "T'as déjà fait quelque chose pour plaire sexuellement à quelqu'un mais que tu aurais jamais fait autrement ?",
+        "Quelle est la chose la plus difficile à admettre sur ton passé sentimental ou sexuel ?",
+        "As-tu déjà fini une nuit avec quelqu'un et immédiatement voulu que ça recommence avec quelqu'un d'autre ?",
+        "Quel est le truc le plus sauvage que tu aies fait et que tu assumes totalement ?",
+        "T'as déjà eu une relation avec quelqu'un que tes amis auraient désapprouvée ?",
+        "Quelle est la chose la plus honnête que tu n'as jamais dite à quelqu'un avec qui tu as couché ?",
+        "T'as déjà partagé quelque chose d'intime sur quelqu'un avec qui tu étais à quelqu'un d'autre ?",
+        "Quel est le truc le plus inavouable de ton passé romantique ou sexuel — et tu en es fier ou pas ?",
+      ]
+    }
+  };
+
+  // ——— STATE ———
+  let players = [];
+  let currentMode = null;
+  let currentPlayerIndex = 0;
+  let round = 1;
+  let currentType = null;
+
+  // ——— HELPERS ———
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    el.classList.add('active');
+    el.style.animation = 'none';
+    requestAnimationFrame(() => { el.style.animation = ''; });
+  }
+
+  function randomFrom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function getModeColors() {
+    const map = { family: '#4ade80', soft: '#60a5fa', normal: '#f59e0b', hardcore: '#f43f5e' };
+    return map[currentMode] || '#f43f5e';
+  }
+
+  // ——— PLAYERS ———
+  function addPlayer() {
+    const input = document.getElementById('player-input');
+    const name = input.value.trim();
+    if (!name || players.length >= 8) return;
+    if (players.find(p => p.name.toLowerCase() === name.toLowerCase())) {
+      input.value = '';
+      return;
+    }
+    const player = {
+      name,
+      color: COLORS[players.length % COLORS.length],
+      avatar: AVATARS[players.length % AVATARS.length]
+    };
+    players.push(player);
+    input.value = '';
+    renderPlayers();
+    input.focus();
+  }
+
+  function removePlayer(name) {
+    players = players.filter(p => p.name !== name);
+    renderPlayers();
+  }
+
+  function renderPlayers() {
+    const list = document.getElementById('players-list');
+    const placeholder = document.getElementById('players-placeholder');
+    const btn = document.getElementById('btn-next-players');
+
+    if (players.length === 0) {
+      list.innerHTML = '<p class="text-muted" id="players-placeholder" style="padding:4px 0">Ajoute au moins 2 joueurs</p>';
+      btn.disabled = true;
+      btn.style.opacity = '0.4';
+    } else {
+      list.innerHTML = players.map(p => `
+        <div class="player-tag">
+          <span style="background:${p.color}" class="player-color"></span>
+          ${p.name}
+          <span class="tag-remove" onclick="removePlayer('${p.name}')">✕</span>
+        </div>
+      `).join('');
+      btn.disabled = players.length < 2;
+      btn.style.opacity = players.length >= 2 ? '1' : '0.4';
+    }
+  }
+
+  function goToMode() {
+    if (players.length < 2) return;
+    goTo('screen-mode');
+  }
+
+  // ——— MODE ———
+  function selectMode(mode, el) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    const btn = document.getElementById('btn-start');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+
+  function startGame() {
+    if (!currentMode) return;
+    round = 1;
+    currentPlayerIndex = Math.floor(Math.random() * players.length);
+    showPlayerTurn();
+  }
+
+  // ——— GAME ———
+  function showPlayerTurn() {
+    const player = players[currentPlayerIndex];
+    const color = getModeColors();
+
+    document.getElementById('round-counter').textContent = `Tour ${round}`;
+    document.getElementById('mode-bar-1').style.background = `linear-gradient(90deg, ${color}, transparent)`;
+
+    const avatar = document.getElementById('player-avatar');
+    avatar.textContent = player.avatar;
+    avatar.style.borderColor = player.color;
+    avatar.style.background = player.color + '22';
+
+    const nameEl = document.getElementById('current-player-name');
+    nameEl.textContent = player.name;
+    nameEl.style.background = `linear-gradient(135deg, ${player.color}, ${color})`;
+    nameEl.style.webkitBackgroundClip = 'text';
+    nameEl.style.webkitTextFillColor = 'transparent';
+    nameEl.style.backgroundClip = 'text';
+
+    goTo('screen-player-turn');
+  }
+
+  function showChallenge(type) {
+    currentType = type;
+    const player = players[currentPlayerIndex];
+    const color = getModeColors();
+    const challenges = CHALLENGES[currentMode][type];
+    const challenge = randomFrom(challenges);
+
+    document.getElementById('round-counter-2').textContent = `Tour ${round}`;
+    document.getElementById('mode-bar-2').style.background = `linear-gradient(90deg, ${color}, transparent)`;
+
+    const badge = document.getElementById('challenge-type-badge');
+    badge.textContent = type === 'action' ? '💪 Action' : '💬 Vérité';
+    badge.className = 'challenge-type ' + (type === 'action' ? 'action-type' : 'verite-type');
+
+    document.getElementById('challenge-player-name').textContent = player.name.toUpperCase();
+    document.getElementById('challenge-text').textContent = challenge;
+
+    goTo('screen-challenge');
+    spawnConfetti(type === 'action' ? '#f43f5e' : '#60a5fa');
+  }
+
+  function skipChallenge() {
+    showChallenge(currentType);
+  }
+
+  function nextTurn() {
+    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+    if (currentPlayerIndex === 0) round++;
+    showPlayerTurn();
+  }
+
+  // ——— CONFETTI ———
+  function spawnConfetti(color) {
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      el.style.cssText = `
+        left: ${Math.random() * 100}vw;
+        top: 0;
+        background: ${['#f43f5e','#60a5fa','#4ade80','#f59e0b','#a78bfa'][Math.floor(Math.random()*5)]};
+        animation-duration: ${0.8 + Math.random() * 0.8}s;
+        animation-delay: ${Math.random() * 0.3}s;
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1500);
+    }
+  }
+</script>
+</body>
+</html>
