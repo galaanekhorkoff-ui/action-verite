@@ -21,6 +21,8 @@
     --normal-glow: rgba(245,158,11,0.25);
     --hardcore: #f43f5e;
     --hardcore-glow: rgba(244,63,94,0.25);
+    --couple: #ff6b9d;
+    --couple-glow: rgba(255,107,157,0.25);
 
     --accent: #f43f5e;
     --action-color: #f43f5e;
@@ -216,6 +218,22 @@
 
   .btn-add:hover { background: rgba(244,63,94,0.25); transform: scale(1.05); }
 
+  .btn-gender {
+    background: rgba(255,107,157,0.15);
+    border: 1px solid rgba(255,107,157,0.3);
+    border-radius: 12px;
+    color: #ff6b9d;
+    font-size: 1.1rem;
+    width: 48px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .btn-gender.male { background: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.3); color: #60a5fa; }
+  .btn-gender:hover { transform: scale(1.05); }
+
   /* Player tags */
   .players-list {
     display: flex;
@@ -290,6 +308,7 @@
   .mode-card.soft { --mode-color: var(--soft); --mode-glow: var(--soft-glow); }
   .mode-card.normal { --mode-color: var(--normal); --mode-glow: var(--normal-glow); }
   .mode-card.hardcore { --mode-color: var(--hardcore); --mode-glow: var(--hardcore-glow); }
+  .mode-card.couple { --mode-color: var(--couple); --mode-glow: var(--couple-glow); grid-column: 1 / -1; }
 
   .mode-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
   .mode-name { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -514,6 +533,7 @@
 
     <div class="input-row">
       <input class="input-field" id="player-input" type="text" placeholder="Prénom du joueur..." maxlength="20" onkeydown="if(event.key==='Enter')addPlayer()">
+      <button class="btn-gender" id="gender-toggle" onclick="toggleGender()" title="Genre">♀</button>
       <button class="btn-add" onclick="addPlayer()">+</button>
     </div>
 
@@ -552,6 +572,11 @@
         <span class="mode-emoji">🔥</span>
         <div class="mode-name">Hardcore</div>
         <div class="mode-desc">Âmes sensibles s'abstenir</div>
+      </div>
+      <div class="mode-card couple" onclick="selectMode('couple', this)" id="couple-mode-card">
+        <span class="mode-emoji">💋</span>
+        <div class="mode-name">Soirée en couple</div>
+        <div class="mode-desc">Juste vous deux. Tension garantie. 🔞</div>
       </div>
     </div>
 
@@ -1410,6 +1435,338 @@
         "T'as déjà partagé quelque chose d'intime sur quelqu'un avec qui tu étais à quelqu'un d'autre ?",
         "Quel est le truc le plus inavouable de ton passé romantique ou sexuel — et tu en es fier ou pas ?",
       ]
+    },
+
+    couple: {
+      action: {
+        generic: [
+          // ——— Tendresse / tension montante ———
+          "Regarde {partenaire} dans les yeux sans parler pendant 60 secondes. Pas le droit de sourire.",
+          "Chuchote à l'oreille de {partenaire} la première chose que tu as remarquée chez lui/elle.",
+          "Prends la main de {partenaire} et embrasse chaque doigt lentement, un par un.",
+          "Masse la nuque et les épaules de {partenaire} pendant 2 minutes sans s'arrêter.",
+          "Embrasse {partenaire} de la façon la plus passionnée possible — au moins 30 secondes.",
+          "Souffle doucement dans l'oreille de {partenaire} pendant 20 secondes sans parler.",
+          "Passe tes doigts dans les cheveux de {partenaire} très lentement pendant 1 minute.",
+          "Embrasse {partenaire} sur chaque partie du visage sauf la bouche — lentement.",
+          "Prends le visage de {partenaire} dans tes deux mains et embrasse-le/la comme si c'était la dernière fois.",
+          "Glisse ta main sous le t-shirt de {partenaire} et caresse son dos pendant 30 secondes.",
+          "Dis à voix haute à {partenaire} ce que tu ferais si vous étiez seuls cette nuit sans aucune limite.",
+          "Ferme les yeux. {partenaire} t'embrasse où il/elle veut — 3 endroits différents. Devine où.",
+          "Embrasse {partenaire} dans le cou pendant 30 secondes sans t'arrêter.",
+          "Mordille légèrement le lobe d'oreille de {partenaire} et chuchote-lui ce que tu veux.",
+          "Dessine lentement avec ton doigt sur le dos nu de {partenaire} ce que tu veux lui faire cette nuit.",
+          "Embrasse {partenaire} cou, épaules, clavicule — sans s'arrêter pendant 1 minute.",
+          "Regarde {partenaire} droit dans les yeux et dis-lui exactement ce que tu vas lui faire après le jeu.",
+          "Lèche lentement le cou de {partenaire} de bas en haut, une seule fois, très lentement.",
+          "Décris à {partenaire} en détail le premier fantasme qui te passe par la tête en ce moment.",
+          // ——— Sensuel / physique ———
+          "Pose ta main sur l'intérieur de la cuisse de {partenaire} et laisse-la là sans bouger pendant 1 minute.",
+          "Embrasse {partenaire} en partant de la bouche et en descendant lentement jusqu'au nombril.",
+          "Retire le t-shirt de {partenaire} toi-même, aussi lentement que possible.",
+          "Laisse {partenaire} te déshabiller entièrement d'un vêtement de son choix.",
+          "Masse l'intérieur des cuisses de {partenaire} pendant 2 minutes sans aller plus haut.",
+          "Lèche lentement la clavicule de {partenaire} puis mords-la légèrement.",
+          "Embrasse {partenaire} dans le cou et laisse une marque (si il/elle est d'accord).",
+          "Fais un strip-tease complet pour {partenaire} sur une musique de ton choix.",
+          "Bande les yeux de {partenaire} avec un tissu. Embrasse-le/la où tu veux. Il/elle doit deviner où.",
+          "Verse quelques gouttes d'eau froide ou d'une glace fondue sur le corps de {partenaire} et lèche-les.",
+          "Embrasse {partenaire} sur tout le corps sauf les lèvres pendant 2 minutes.",
+          "Laisse {partenaire} te faire ce qu'il/elle veut pendant 2 minutes — tu n'as pas le droit de réagir.",
+          "Montre à {partenaire} précisément le geste ou l'endroit qui te fait le plus d'effet.",
+          "Prends {partenaire} par la taille et danse contre lui/elle pendant 2 minutes, le plus près possible.",
+          "Embrasse {partenaire} partout sur le dos, de la nuque jusqu'au bas des reins.",
+          "Lèche et mordille doucement le bras de {partenaire} de l'épaule jusqu'au poignet.",
+          "Déshabille {partenaire} entièrement, le plus lentement possible.",
+          "Passe 1 minute à embrasser uniquement le ventre de {partenaire}.",
+          "Attache les mains de {partenaire} avec un foulard pendant le prochain défi.",
+          "Couvre les yeux de {partenaire} et explore son corps avec tes lèvres pendant 2 minutes.",
+          // ——— Très explicite ———
+          "Caresse {partenaire} exactement là où tu sais qu'il/elle aime le plus — pendant 2 minutes.",
+          "Dis à {partenaire} en une phrase très crue ce que tu vas lui faire dans l'heure qui vient.",
+          "Fais à {partenaire} exactement ce qu'il/elle t'a dit vouloir mais que vous n'avez pas encore essayé.",
+          "Prends {partenaire} et embrasse-le/la passionnément sans prévenir.",
+          "Lèche lentement les lèvres de {partenaire} sans l'embrasser vraiment — pendant 10 secondes.",
+          "Masse {partenaire} là où il/elle est le plus sensible, pendant 3 minutes.",
+          "Mords doucement la lèvre inférieure de {partenaire} en le/la regardant dans les yeux.",
+          "Dis à {partenaire} la chose la plus osée que tu aies jamais voulu lui faire.",
+          "Laisse {partenaire} t'embrasser partout où il/elle veut pendant 2 minutes sans te retenir.",
+          "Mime lentement ce que tu veux faire à {partenaire} — sans le toucher, juste avec tes mains dans l'air.",
+          "Embrasse {partenaire} en commençant par le bas du dos et en remontant colonne vertébrale jusqu'à la nuque.",
+          "Prends les poignets de {partenaire} et maintiens-les au-dessus de sa tête en l'embrassant dans le cou.",
+          "Glisse ta main dans les cheveux de {partenaire} et tire doucement en arrière pour dégager son cou.",
+          "Décris à {partenaire} en détail la position dans laquelle tu voudrais le/la avoir ce soir.",
+          "Pose tes lèvres sur l'oreille de {partenaire} et dis-lui la chose la plus explicite qui te passe par la tête.",
+          "Caresse {partenaire} lentement sur tout le corps avec juste le bout des doigts, pendant 2 minutes.",
+          "Laisse {partenaire} te guider ses mains où il/elle veut sur son corps pendant 1 minute.",
+          "Embrasse {partenaire} dans le bas du ventre, juste au-dessus de la ceinture.",
+          "Demande à {partenaire} ce dont il/elle a le plus envie en ce moment — et fais-le.",
+          "Fais à {partenaire} un massage qui commence aux épaules et descend jusqu'où tu veux.",
+          "Pose ta bouche sur l'intérieur du poignet de {partenaire} et remonte lentement jusqu'au coude.",
+          "Regarde {partenaire} dans les yeux et touche-le/la exactement là où il/elle aime le plus.",
+          "Embrasse {partenaire} en changeant d'intensité — doux, puis plus fort, puis doux à nouveau — pendant 1 min.",
+          "Dis à {partenaire} exactement ce que tu ressens physiquement quand il/elle te touche.",
+          "Mets les deux mains de {partenaire} sur toi, là où tu veux qu'il/elle te touche.",
+          "Laisse {partenaire} te déshabiller et ne réagis pas — laisse-le/la faire à son rythme.",
+          "Embrasse {partenaire} sur la hanche, l'intérieur de la cuisse, et remonte vers le ventre.",
+          "Enduis ton doigt de quelque chose de sucré (miel, nutella…) et laisse {partenaire} le lècher.",
+          "Fais à {partenaire} exactement ce qu'il/elle t'a demandé une fois sans que tu l'aies fait.",
+          "Prends {partenaire} par surprise par derrière, embrasse-le/la dans le cou et glisse tes mains sous son t-shirt.",
+        ],
+
+        MF: [
+          "Embrasse {partenaire} dans le creux du genou puis remonte lentement le long de la jambe intérieure.",
+          "Tire doucement les cheveux de {partenaire} en arrière et embrasse-la dans le cou.",
+          "Retire le soutien-gorge de {partenaire} toi-même, les yeux fermés.",
+          "Embrasse {partenaire} sur le ventre et l'intérieur des hanches pendant 1 minute.",
+          "Masse les fessiers de {partenaire} pendant 2 minutes.",
+          "Dis à {partenaire} précisément ce que tu trouves le plus sexy dans son corps — sans filtre.",
+          "Lèche lentement l'intérieur du poignet de {partenaire} et remonte jusqu'au coude.",
+          "Passe tes mains sous la jupe ou le pantalon de {partenaire} et caresse ses cuisses.",
+          "Embrasse {partenaire} sur les seins par-dessus ou sous les vêtements.",
+          "Tiens {partenaire} par les hanches et colle-la contre toi pendant 30 secondes.",
+          "Embrasse {partenaire} sur tout le dos pendant 1 minute en commençant par la nuque.",
+          "Glisse ta main sur le ventre de {partenaire} et descends lentement jusqu'à la limite de son jean.",
+          "Masse les seins de {partenaire} doucement pendant 1 minute.",
+          "Embrasse {partenaire} entre les omoplates puis descends lentement.",
+          "Tiens les hanches de {partenaire} et dis-lui exactement ce que tu veux lui faire.",
+          "Passe tes lèvres sur l'intérieur de la cuisse de {partenaire} — sans aller plus haut.",
+          "Glisse tes doigts dans les cheveux de {partenaire} et embrasse-la comme dans un film.",
+          "Caresse lentement le ventre de {partenaire} de haut en bas pendant 2 minutes.",
+          "Embrasse {partenaire} partout sur le visage, le cou, les épaules — sans t'arrêter.",
+          "Prends {partenaire} dans tes bras et tiens-la aussi serrée que possible pendant 1 minute.",
+        ],
+
+        FM: [
+          "Embrasse {partenaire} dans la nuque et mords-lui légèrement l'oreille.",
+          "Passe tes mains sur le torse de {partenaire} lentement en le regardant dans les yeux.",
+          "Assois-toi à califourchon sur {partenaire} et embrasse-le sans te servir de tes mains.",
+          "Embrasse {partenaire} sur tout le torse lentement, de haut en bas.",
+          "Trace avec ta langue le long de l'épaule et du bras de {partenaire}.",
+          "Dis à {partenaire} en détail ce que tu aimes le plus qu'il te fasse au lit.",
+          "Passe tes doigts lentement sur l'abdomen de {partenaire}.",
+          "Embrasse {partenaire} dans le cou et sur la mâchoire pendant 1 minute.",
+          "Glisse ta main sous le t-shirt de {partenaire} et caresse son ventre et sa poitrine.",
+          "Laisse {partenaire} t'embrasser où il veut pendant 2 minutes — sans réagir.",
+          "Trace des cercles avec tes ongles sur le dos de {partenaire} pendant 1 minute.",
+          "Chuchote à {partenaire} le fantasme que tu gardes pour toi depuis longtemps.",
+          "Masse les cuisses de {partenaire} lentement pendant 2 minutes.",
+          "Embrasse {partenaire} sur les abdominaux et le bas du ventre.",
+          "Mordille doucement l'épaule de {partenaire} en le regardant dans les yeux.",
+          "Glisse tes doigts dans les cheveux de {partenaire} et tire légèrement.",
+          "Embrasse {partenaire} le long de la mâchoire jusqu'à l'oreille.",
+          "Passe tes lèvres sur la nuque de {partenaire} pendant 30 secondes.",
+          "Caresse le dos de {partenaire} de la nuque jusqu'au bas des reins.",
+          "Assois-toi sur les genoux de {partenaire} et dis-lui ce que tu veux qu'il te fasse.",
+        ],
+
+        FF: [
+          "Embrasse {partenaire} dans la nuque et caresse ses cheveux en même temps.",
+          "Masse les jambes de {partenaire} de bas en haut pendant 2 minutes.",
+          "Embrasse {partenaire} sur les épaules et le décolleté lentement.",
+          "Retire doucement le haut de {partenaire} et embrasse-la sur les épaules.",
+          "Embrasse {partenaire} dans le dos des épaules jusqu'au bas des reins.",
+          "Lèche lentement l'épaule de {partenaire} en la regardant dans les yeux.",
+          "Passe tes doigts sur le visage de {partenaire} et embrasse-la tendrement.",
+          "Masse la poitrine de {partenaire} pendant 1 minute.",
+          "Prends {partenaire} par la taille et dansez lentement collées l'une contre l'autre.",
+          "Embrasse {partenaire} sur le ventre et autour du nombril.",
+          "Passe tes lèvres sur l'intérieur du coude de {partenaire} et remonte jusqu'à l'épaule.",
+          "Caresse les hanches de {partenaire} pendant 1 minute en la regardant dans les yeux.",
+          "Embrasse {partenaire} sur les seins doucement.",
+          "Glisse ta main le long de la cuisse de {partenaire} — de bas en haut.",
+          "Souffle doucement dans le cou de {partenaire} et embrasse-la juste après.",
+          "Tire légèrement les cheveux de {partenaire} en arrière et embrasse-la dans le cou.",
+          "Laisse {partenaire} guider tes mains où elle veut pendant 1 minute.",
+          "Embrasse {partenaire} sur tout le dos pendant 1 minute.",
+          "Mordille doucement la lèvre inférieure de {partenaire}.",
+          "Dis à {partenaire} le fantasme que vous n'avez pas encore réalisé ensemble — puis demandez-lui si elle veut.",
+        ],
+
+        MM: [
+          "Embrasse {partenaire} dans la nuque et mordille son oreille.",
+          "Masse les épaules et le haut du dos de {partenaire} pendant 2 minutes.",
+          "Embrasse {partenaire} sur le torse et l'abdomen.",
+          "Retire le t-shirt de {partenaire} toi-même, lentement.",
+          "Embrasse {partenaire} dans le cou et mords doucement.",
+          "Passe tes mains dans les cheveux de {partenaire} et tire légèrement en arrière.",
+          "Embrasse {partenaire} de la bouche jusqu'à la nuque lentement.",
+          "Masse les cuisses de {partenaire} pendant 2 minutes.",
+          "Embrasse {partenaire} sur les abdominaux et le bas du ventre.",
+          "Prends les poignets de {partenaire} et maintiens-les au-dessus de sa tête en l'embrassant.",
+          "Trace avec ta langue le long du cou de {partenaire}.",
+          "Embrasse {partenaire} dans le bas du dos et les hanches.",
+          "Passe ta main sous la ceinture de {partenaire} et caresse son bas-ventre.",
+          "Caresse le dos de {partenaire} avec tes ongles doucement pendant 1 minute.",
+          "Mordille la mâchoire de {partenaire} et embrasse-le dans le cou.",
+          "Glisse tes doigts sur l'intérieur de la cuisse de {partenaire} pendant 1 minute.",
+          "Embrasse {partenaire} de l'épaule jusqu'au poignet lentement.",
+          "Prends {partenaire} par la nuque et embrasse-le passionnément sans prévenir.",
+          "Laisse {partenaire} te faire ce qu'il veut pendant 2 minutes — sans réagir.",
+          "Chuchote à {partenaire} exactement ce que tu veux cette nuit en détail.",
+        ],
+      },
+
+      verite: {
+        generic: [
+          // ——— Tendres / connexion ———
+          "Qu'est-ce qui t'a attiré chez {partenaire} la toute première fois ?",
+          "Quel est le moment où tu as le plus eu envie de {partenaire} depuis votre début ?",
+          "Quelle est la chose que tu fais en secret pour plaire à {partenaire} ?",
+          "Quel est le compliment le plus sincère que tu pourrais faire à {partenaire} sur votre vie intime ?",
+          "Quelle est la chose que {partenaire} fait qui te fait fondre à chaque fois ?",
+          "Quelle est la chose que tu remarques en premier chez {partenaire} quand il/elle rentre à la maison ?",
+          "Quelle est la chose la plus romantique que {partenaire} ait faite pour toi ?",
+          "Quel est ton souvenir préféré d'un moment partagé avec {partenaire} ?",
+          "Quelle est la chose qui te fait te sentir le plus proche de {partenaire} ?",
+          "Si tu devais décrire {partenaire} en 3 mots à quelqu'un qui ne le/la connaît pas, ce serait quoi ?",
+          "Quel est le moment où tu as réalisé que tu étais vraiment amoureux/amoureuse de {partenaire} ?",
+          "Quelle est la chose que {partenaire} fait qui te rend le plus fier/fière ?",
+          "Y a-t-il une chose que tu n'as jamais dite à {partenaire} mais que tu penses souvent ?",
+          "Quel est le truc que tu préfères faire avec {partenaire} hors du lit ?",
+          "Quelle est la chose que {partenaire} pourrait faire pour te surprendre agréablement ?",
+          // ——— Désir / sensualité ———
+          "Quelle est la chose que {partenaire} fait qui te rend le plus fou/folle de désir ?",
+          "Quelle est la partie du corps de {partenaire} que tu aimes le plus ?",
+          "Quel est le fantasme que tu n'as jamais révélé à {partenaire} ?",
+          "Quelle est la chose que {partenaire} pourrait faire pour te rendre complètement dingue ?",
+          "Décris le moment où tu as eu le plus envie d'arrêter tout pour embrasser {partenaire}.",
+          "Si tu pouvais passer 24h seul(e) avec {partenaire} sans contrainte, que ferais-tu ?",
+          "Quelle est la scène de film qui t'a donné envie de quelque chose avec {partenaire} ?",
+          "Quelle est la chose que tu aimes le plus dans la façon dont {partenaire} t'embrasse ?",
+          "Y a-t-il un endroit où tu rêves de faire l'amour avec {partenaire} que vous n'avez pas testé ?",
+          "Qu'est-ce que {partenaire} pourrait te dire à l'oreille pour t'exciter instantanément ?",
+          "Quelle est la chose que tu n'as jamais osé demander à {partenaire} mais que tu veux vraiment ?",
+          "Qu'est-ce que {partenaire} fait mieux que quiconque avec toi ?",
+          "Quelle est la chose la plus osée que tu aies faite avec {partenaire} et que tu referais ?",
+          "Décris en détail la position que tu préfères avec {partenaire} et pourquoi.",
+          "Quelle est la chose que tu aimerais que {partenaire} te fasse ce soir précisément ?",
+          "Quel est l'endroit du corps de {partenaire} où tu aimes le plus poser les lèvres ?",
+          "Si tu devais choisir une seule chose à faire avec {partenaire} toute la nuit, ce serait quoi ?",
+          "Quel est le fantasme que tu veux réaliser avec {partenaire} avant la fin de l'année ?",
+          "Quelle est la chose que {partenaire} t'a faite une fois et que tu veux absolument qu'il/elle recommence ?",
+          "Qu'est-ce qui te rend le plus fou/folle chez {partenaire} au lit ?",
+          "Quelle est la chose la plus audacieuse que tu voudrais proposer à {partenaire} ?",
+          // ——— Très explicite ———
+          "Quelle est la chose la plus crue que tu aies jamais dite à {partenaire} dans un moment intime ?",
+          "Décris la nuit la plus mémorable que tu aies passée avec {partenaire}.",
+          "Quel est le fantasme récurrent que tu as en pensant à {partenaire} ?",
+          "Quelle est la chose la plus difficile à admettre sur ce que tu veux de {partenaire} ?",
+          "Si {partenaire} pouvait te faire une seule chose en ce moment, ce serait quoi ?",
+          "Quel est le truc que {partenaire} fait avec ses mains qui te rend dingue ?",
+          "Y a-t-il quelque chose que tu n'as jamais osé faire avec {partenaire} mais que tu veux vraiment ?",
+          "Quelle est la chose la plus intense que tu aies ressentie physiquement avec {partenaire} ?",
+          "Qu'est-ce que tu n'as jamais dit à {partenaire} sur votre intimité mais que tu penses souvent ?",
+          "Quelle est la chose que tu changerais dans votre vie intime si tu pouvais ?",
+          "As-tu déjà simulé quelque chose avec {partenaire} ? Quoi et pourquoi ?",
+          "Quelle est la chose que tu fais avec {partenaire} et que tu adorerais faire plus souvent ?",
+          "Y a-t-il un truc que tu as envie d'essayer avec {partenaire} mais tu n'as jamais osé demander ?",
+          "Quel est le moment où tu as été le plus excité(e) par {partenaire} de manière inattendue ?",
+          "Quelle est la chose la plus débridée que tu voudrais vivre avec {partenaire} ?",
+          "Quelle est la partie du corps de {partenaire} qui t'attire le plus et pourquoi ?",
+          "Décris exactement comment tu veux être embrassé(e) par {partenaire}.",
+          "Quelle est la chose la plus douce que {partenaire} t'ait faite au lit ?",
+          "Quelle est la chose la plus intense — pas forcément physique — que vous aie vécu ensemble ?",
+          "Est-ce qu'il y a quelque chose que {partenaire} a fait une fois et que tu regrettes qu'il/elle ne refasse pas ?",
+          "Quelle est la chose que tu te retiens de dire à {partenaire} en ce moment même ?",
+          "Quelle est ta position préférée avec {partenaire} et pourquoi ?",
+          "Décris en détail ce que tu veux que {partenaire} te fasse après ce jeu.",
+          "Y a-t-il quelque chose que tu aimerais que {partenaire} fasse différemment au lit ?",
+          "Quelle est la chose que tu trouves la plus sexy dans le comportement de {partenaire} au quotidien ?",
+          "Quel est l'endroit de ton corps où tu aimes le plus que {partenaire} pose ses lèvres ?",
+          "Quelle est la chose la plus courageuse que tu aies faite pour {partenaire} intimement ?",
+          "Est-ce qu'il y a un fantasme que tu aurais voulu réaliser avec {partenaire} mais que t'as jamais proposé ?",
+          "Quelle est la chose que {partenaire} fait avec ses yeux qui t'excite ?",
+          "Quelle est la chose que tu voudrais que {partenaire} te dise au lit mais qu'il/elle ne dit pas assez ?",
+          "Est-ce qu'il y a une partie de ton corps que tu voudrais que {partenaire} explore plus ?",
+          "Quelle est la chose la plus folle que tu ferais avec {partenaire} si vous étiez sûrs que personne ne le saurait jamais ?",
+          "Quelle est la chose que tu as apprise sur toi-même grâce à {partenaire} intimement ?",
+          "Est-ce que {partenaire} connaît vraiment ta zone la plus sensible ? Laquelle c'est ?",
+          "Quelle est la chose que tu n'avais jamais faite avant {partenaire} et que tu es content(e) d'avoir découverte ?",
+          "Décris la tenue ou l'absence de tenue de {partenaire} qui te rend le plus fou/folle.",
+          "Quelle est la chose que tu voudrais essayer au moins une fois avec {partenaire} avant la fin de l'année ?",
+          "Est-ce que tu as déjà pensé à {partenaire} pendant un moment où il/elle n'était pas là ? Dans quel contexte ?",
+          "Quelle est la chose la plus vraie que tu puisses dire sur ce que {partenaire} te fait ressentir ?",
+          "Quel est le plus grand compliment que tu pourrais faire à {partenaire} sur sa façon de te traiter au lit ?",
+          "Quelle est la chose que {partenaire} fait qui montre qu'il/elle te désire — et que tu adores ?",
+          "Si tu devais noter sur 10 votre complicité physique, tu mettrais combien et pourquoi ?",
+          "Quelle est la chose que tu gardes secrète sur ce que tu ressens pendant vos moments intimes ?",
+          "Est-ce qu'il y a une limite que tu as envie de repousser avec {partenaire} ?",
+          "Quelle est la phrase que tu voudrais que {partenaire} te dise en ce moment ?",
+        ],
+
+        MF: [
+          "Quelle est la partie du corps de {partenaire} que tu regardes en premier quand elle entre dans une pièce ?",
+          "Décris précisément ce que tu lui ferais si vous étiez seuls là maintenant.",
+          "Quelle est la chose que {partenaire} porte (ou ne porte pas) qui te rend le plus dingue ?",
+          "Qu'est-ce que {partenaire} fait avec ses hanches qui t'obsède ?",
+          "Quel est le geste de {partenaire} qui te fait perdre la tête instantanément ?",
+          "Quelle est la partie du corps de {partenaire} que tu as le plus envie d'embrasser là maintenant ?",
+          "Décris en détail la façon dont {partenaire} t'embrasse qui te rend le plus fou.",
+          "Quelle est la chose que tu aimes le plus toucher chez {partenaire} ?",
+          "Si tu devais décrire {partenaire} nue en trois mots, ce serait quoi ?",
+          "Quelle est la chose que {partenaire} fait naturellement et qui t'excite sans qu'elle le réalise ?",
+          "Quel est l'endroit du corps de {partenaire} qui te rend le plus fou quand tu l'embrasses ?",
+          "Quelle est la tenue que {partenaire} a portée qui t'a le plus excité ?",
+          "Décris ce que tu ressens physiquement quand {partenaire} te touche.",
+          "Quelle est la chose que {partenaire} fait avec sa bouche qui te rend dingue ?",
+          "Est-ce qu'il y a un endroit sur le corps de {partenaire} que tu n'as jamais vraiment exploré et que tu veux ?",
+        ],
+
+        FM: [
+          "Quelle est la chose que {partenaire} fait avec ses mains qui t'excite le plus ?",
+          "Décris ce que tu aimes le plus dans la façon dont {partenaire} te tient.",
+          "Quelle est la partie du corps de {partenaire} sur laquelle tu as du mal à ne pas mettre les mains ?",
+          "Qu'est-ce que {partenaire} te dit ou te chuchote qui te rend complètement folle ?",
+          "Quel est le regard de {partenaire} qui te fait fondre ?",
+          "Quelle est la chose que {partenaire} fait avec sa voix ou son souffle qui t'excite ?",
+          "Décris la façon dont {partenaire} t'embrasse qui te fait le plus d'effet.",
+          "Quelle est la partie du corps de {partenaire} que tu aimes le plus embrasser ?",
+          "Quelle est la chose que {partenaire} fait physiquement qui te donne le plus envie de lui ?",
+          "Est-ce qu'il y a quelque chose que tu aimerais que {partenaire} prenne plus d'initiative pour faire ?",
+          "Qu'est-ce que {partenaire} fait avec ses bras ou sa façon de te tenir qui te rassure et t'excite ?",
+          "Quelle est la chose que {partenaire} a faite une fois et dont tu n'as jamais oublié la sensation ?",
+          "Décris précisément ce que tu voudrais que {partenaire} te fasse là maintenant.",
+          "Quelle est la chose que tu n'oses jamais lui demander mais que tu voudrais ?",
+          "Est-ce que {partenaire} sait vraiment comment te faire perdre la tête ? Qu'est-ce qu'il fait ?",
+        ],
+
+        FF: [
+          "Quelle est la chose que tu aimes le plus dans la façon dont {partenaire} t'embrasse ?",
+          "Décris la chose que {partenaire} fait avec ses lèvres qui te rend folle.",
+          "Quelle est la partie du corps de {partenaire} que tu trouves la plus irrésistible ?",
+          "Qu'est-ce que {partenaire} pourrait te chuchoter pour te faire fondre instantanément ?",
+          "Quel est le moment de tendresse avec {partenaire} qui t'a le plus émue ?",
+          "Quelle est la chose que {partenaire} fait avec ses mains qui t'excite le plus ?",
+          "Décris la façon dont {partenaire} te regarde qui te rend folle.",
+          "Quelle est la chose que tu n'as jamais osé demander à {partenaire} mais que tu voudrais vraiment ?",
+          "Quelle est la partie du corps de {partenaire} que tu as le plus envie d'embrasser en ce moment ?",
+          "Est-ce qu'il y a quelque chose que vous n'avez pas encore essayé ensemble et que tu veux vraiment ?",
+          "Quelle est la chose que {partenaire} fait naturellement qui t'excite sans qu'elle le réalise ?",
+          "Décris ta nuit idéale avec {partenaire} — dans les moindres détails.",
+          "Quelle est la tenue que {partenaire} a portée qui t'a le plus excitée ?",
+          "Quelle est la chose la plus osée que vous ayez faite ensemble et que tu referais ?",
+          "Est-ce que {partenaire} sait vraiment quelle partie de ton corps est la plus sensible ?",
+        ],
+
+        MM: [
+          "Quelle est la chose que {partenaire} fait qui te rend le plus fou physiquement ?",
+          "Décris ce que tu aimes le plus dans la façon dont {partenaire} te tient ou t'embrasse.",
+          "Quelle est la partie du corps de {partenaire} sur laquelle tu veux mettre les mains là maintenant ?",
+          "Quel est le truc que {partenaire} te dit qui te rend complètement dingue ?",
+          "Quelle est la chose la plus intense que tu aies ressentie avec {partenaire} ?",
+          "Décris précisément ce que tu voudrais que {partenaire} te fasse là maintenant.",
+          "Quelle est la partie du corps de {partenaire} que tu aimes le plus embrasser ?",
+          "Qu'est-ce que {partenaire} fait qui te donne le plus envie de lui ?",
+          "Quelle est la chose que tu n'as jamais osé proposer à {partenaire} mais que tu veux vraiment ?",
+          "Quelle est la tenue ou l'absence de tenue de {partenaire} qui t'excite le plus ?",
+          "Décris la nuit la plus mémorable que tu aies passée avec {partenaire}.",
+          "Quelle est la chose que {partenaire} fait naturellement et qui t'excite sans qu'il le sache ?",
+          "Est-ce qu'il y a quelque chose que vous n'avez pas encore essayé et que tu voudrais vraiment ?",
+          "Quelle est la chose la plus audacieuse que tu voudrais proposer à {partenaire} ?",
+          "Est-ce que {partenaire} connaît vraiment ta zone la plus sensible ?",
+        ],
+      }
     }
   };
 
@@ -1419,6 +1776,19 @@
   let currentPlayerIndex = 0;
   let round = 1;
   let currentType = null;
+  let currentGender = 'F'; // default gender for next player to add
+
+  function toggleGender() {
+    currentGender = currentGender === 'F' ? 'M' : 'F';
+    const btn = document.getElementById('gender-toggle');
+    if (currentGender === 'F') {
+      btn.textContent = '♀';
+      btn.classList.remove('male');
+    } else {
+      btn.textContent = '♂';
+      btn.classList.add('male');
+    }
+  }
 
   // ——— HELPERS ———
   function goTo(id) {
@@ -1434,7 +1804,7 @@
   }
 
   function getModeColors() {
-    const map = { family: '#4ade80', soft: '#60a5fa', normal: '#f59e0b', hardcore: '#f43f5e' };
+    const map = { family: '#4ade80', soft: '#60a5fa', normal: '#f59e0b', hardcore: '#f43f5e', couple: '#ff6b9d' };
     return map[currentMode] || '#f43f5e';
   }
 
@@ -1449,23 +1819,28 @@
     }
     const player = {
       name,
+      gender: currentGender,
       color: COLORS[players.length % COLORS.length],
       avatar: AVATARS[players.length % AVATARS.length]
     };
     players.push(player);
     input.value = '';
     renderPlayers();
+    // Show/hide couple mode based on player count
+    const coupleCard = document.getElementById('couple-mode-card');
+    if (coupleCard) coupleCard.style.display = players.length === 2 ? '' : 'none';
     input.focus();
   }
 
   function removePlayer(name) {
     players = players.filter(p => p.name !== name);
     renderPlayers();
+    const coupleCard = document.getElementById('couple-mode-card');
+    if (coupleCard) coupleCard.style.display = players.length === 2 ? '' : 'none';
   }
 
   function renderPlayers() {
     const list = document.getElementById('players-list');
-    const placeholder = document.getElementById('players-placeholder');
     const btn = document.getElementById('btn-next-players');
 
     if (players.length === 0) {
@@ -1476,6 +1851,7 @@
       list.innerHTML = players.map(p => `
         <div class="player-tag">
           <span style="background:${p.color}" class="player-color"></span>
+          <span style="font-size:0.75rem">${p.gender === 'F' ? '♀' : '♂'}</span>
           ${p.name}
           <span class="tag-remove" onclick="removePlayer('${p.name}')">✕</span>
         </div>
@@ -1534,8 +1910,27 @@
     currentType = type;
     const player = players[currentPlayerIndex];
     const color = getModeColors();
-    const challenges = CHALLENGES[currentMode][type];
-    const challenge = randomFrom(challenges);
+
+    let challenges;
+    if (currentMode === 'couple') {
+      const partner = players.find(p => p.name !== player.name);
+      const playerG = player.gender;
+      const partnerG = partner ? partner.gender : 'F';
+      // pick gender-appropriate pool
+      const pool = CHALLENGES.couple[type];
+      const key = playerG + partnerG; // FF, FM, MF, MM
+      const specific = pool[key] || [];
+      const generic = pool['generic'] || [];
+      const combined = [...specific, ...generic];
+      const raw = randomFrom(combined.length > 0 ? combined : generic);
+      // replace placeholders
+      const partnerName = partner ? partner.name : 'ton/ta partenaire';
+      challenges = [raw.replace(/\{partenaire\}/g, partnerName).replace(/\{joueur\}/g, player.name)];
+    } else {
+      challenges = CHALLENGES[currentMode][type];
+    }
+
+    const challenge = currentMode === 'couple' ? challenges[0] : randomFrom(challenges);
 
     document.getElementById('round-counter-2').textContent = `Tour ${round}`;
     document.getElementById('mode-bar-2').style.background = `linear-gradient(90deg, ${color}, transparent)`;
@@ -1548,7 +1943,7 @@
     document.getElementById('challenge-text').textContent = challenge;
 
     goTo('screen-challenge');
-    spawnConfetti(type === 'action' ? '#f43f5e' : '#60a5fa');
+    spawnConfetti(currentMode === 'couple' ? '#ff6b9d' : type === 'action' ? '#f43f5e' : '#60a5fa');
   }
 
   function skipChallenge() {
